@@ -37,11 +37,9 @@ class generator():
         self.ySize = ySize
         # Two-dimensional list containing current maze including walls
         self.walled_field = [[0] * (self.ySize * 2 + 1) for i in range(self.xSize * 2 + 1)]  
-        print("Init finished")
 
         
     def generateMaze(self):
-        print("Starting generator")
         # Remaining cells
         self.remainingCells = list(range(0,self.ySize*self.xSize))
         # Two-dimensional list containing current maze
