@@ -66,7 +66,8 @@ class generator():
                     try:     
                         #print(self.remainingCells)
                         #print("x: " + str(dx) + " y: " + str(dy))
-                        #print(dx*self.ySize + dy)           
+                        #print(dx*self.ySize + dy)          
+                        #self.printMaze(self.xSize,self.ySize,self.field) 
                         self.remainingCells.remove(dx*self.ySize + dy)
                     except ValueError:                    
                         exit("Value not in range")
@@ -117,35 +118,43 @@ class generator():
         else:
             return return_v.OUTOFBOUND
 
-    def printMaze(self,x,y,pField):
+    def printMaze(self,x,y,pField): 
+        f = open("maze.csv", "w")
         for i in range(x):
+            s_line = ''
             for j in range(y):
-                if pField[i][j] == field_v.EAST:
-                    print('E',end=';')
-                elif pField[i][j] == field_v.C_EAST: 
-                    print('e',end=';')               
-                elif pField[i][j] == field_v.NORTH:
-                    print('N',end=';') 
-                elif pField[i][j] == field_v.C_NORTH:
-                    print('n',end=';') 
-                elif pField[i][j] == field_v.WEST:
-                    print('W',end=';') 
-                elif pField[i][j] == field_v.C_WEST:
-                    print('w',end=';') 
-                elif pField[i][j] == field_v.SOUTH:
-                    print('S',end=';')
-                elif pField[i][j] == field_v.C_SOUTH:
-                    print('s',end=';')
-                elif pField[i][j] == field_v.START:
-                    print('A',end=';')
-                elif pField[i][j] == field_v.CORRIDOR:
-                    print('C',end=';')    
+                debug = 1
+                if debug == 1:                
+                    if pField[i][j] == field_v.EAST:
+                        s_line += 'E;'
+                    elif pField[i][j] == field_v.C_EAST: 
+                        s_line += 'e;'               
+                    elif pField[i][j] == field_v.NORTH:
+                        s_line += 'N;'
+                    elif pField[i][j] == field_v.C_NORTH:
+                        s_line += 'n;' 
+                    elif pField[i][j] == field_v.WEST:
+                        s_line += 'W;' 
+                    elif pField[i][j] == field_v.C_WEST:
+                        s_line += 'w;' 
+                    elif pField[i][j] == field_v.SOUTH:
+                        s_line += 'S;'
+                    elif pField[i][j] == field_v.C_SOUTH:
+                        s_line += 's;'
+                    elif pField[i][j] == field_v.START:
+                        s_line += 'A;'
+                    elif pField[i][j] == field_v.CORRIDOR:
+                        s_line += 'C;'    
+                    else:
+                        s_line += 'X;'
                 else:
-                    print('X',end=';')                
-            print("")
-        print("")
-        print("")
-        print("")
+                    if pField[i][j] in [field_v.EAST,field_v.C_EAST,field_v.NORTH,field_v.C_NORTH,field_v.WEST,field_v.C_WEST,field_v.SOUTH,field_v.C_SOUTH,field_v.START,field_v.CORRIDOR]:
+                        s_line += ' '
+                    else:
+                        s_line += 'X'
+            f.write(s_line + '\n')
+        f.close()
+
 
                         
     def randomWalk(self, startx, starty):
@@ -210,5 +219,5 @@ class generator():
         #print(path)
         return path
 
-g_maze1 = generator(100,100)
+g_maze1 = generator(500,500)
 maze1 = g_maze1.generateMaze()
