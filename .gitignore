@@ -1,7 +1,7 @@
 #vs-code
 .vscode/
 *.csv
-*.xslx
+*.xlsx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
