@@ -31,15 +31,16 @@ class return_v(enum.IntEnum):
 
 
 class generator():
-    def __init__(self, xSize, ySize):
+    def __init__(self):
         random.seed(a=None, version=2)
+
+
+        
+    def generateMaze(self, xSize, ySize):
         self.xSize = xSize
         self.ySize = ySize
         # Two-dimensional list containing current maze including walls
         self.walled_field = [[0] * (self.ySize * 2 + 1) for i in range(self.xSize * 2 + 1)]  
-
-        
-    def generateMaze(self):
         # Remaining cells
         self.remainingCells = list(range(0,self.ySize*self.xSize))
         # Two-dimensional list containing current maze
@@ -123,7 +124,7 @@ class generator():
         for i in range(x):
             s_line = ''
             for j in range(y):
-                debug = 1
+                debug = 0
                 if debug == 1:                
                     if pField[i][j] == field_v.EAST:
                         s_line += 'E;'
@@ -154,8 +155,6 @@ class generator():
                         s_line += 'X'
             f.write(s_line + '\n')
         f.close()
-
-
                         
     def randomWalk(self, startx, starty):
         # Resulting path
@@ -219,5 +218,5 @@ class generator():
         #print(path)
         return path
 
-g_maze1 = generator(500,500)
-maze1 = g_maze1.generateMaze()
+g_maze1 = generator()
+maze1 = g_maze1.generateMaze(50,100)
