@@ -9,38 +9,20 @@ Created on Thu Dec  3 08:27:00 2020
 import math 
 import random
 import enum
-
-class field_v(enum.IntEnum):
-    NOT_VISITED = 0
-    EAST = 1
-    NORTH = 2
-    WEST = 3
-    SOUTH = 4    
-    START = 5
-    CORRIDOR = 6
-    C_EAST = 11
-    C_NORTH = 12
-    C_WEST = 13
-    C_SOUTH = 14
-
-class return_v(enum.IntEnum):
-    VALID = 0
-    OCCUPIED = 1
-    OUTOFBOUND = 2
-    INVALID = 99
+from const import field_v, return_v, draw_v
 
 
-class generator():
+class Generator():
     def __init__(self):
         random.seed(a=None, version=2)
-
-
         
     def generateMaze(self, xSize, ySize):
         self.xSize = xSize
         self.ySize = ySize
+        self.starting_point = (0,0)
+        self.ending_point = (0,0)
         # Two-dimensional list containing current maze including walls
-        self.walled_field = [[0] * (self.ySize * 2 + 1) for i in range(self.xSize * 2 + 1)]  
+        self.walled_field = [[field_v.NOT_VISITED] * (self.ySize * 2 + 1) for i in range(self.xSize * 2 + 1)]  
         # Remaining cells
         self.remainingCells = list(range(0,self.ySize*self.xSize))
         # Two-dimensional list containing current maze
@@ -49,7 +31,7 @@ class generator():
         start = self.remainingCells.pop()
         sx = math.floor(start/self.ySize)
         sy = start%self.ySize
-        print("start: " + str(sx) + ":" + str(sy))
+        # print("start: " + str(sx) + ":" + str(sy))
         self.field[sx][sy] = field_v.START
         # While there are still unvisited cell do generate new cells
         while len(self.remainingCells) > 0:
@@ -57,7 +39,7 @@ class generator():
             #print("currentCellNr: " + str(currentCellNr))
             cx = math.floor(currentCellNr/self.ySize)
             cy = currentCellNr%self.ySize
-            print("currentCell: " + str(cx) + ":" + str(cy))
+            # print("currentCell: " + str(cx) + ":" + str(cy))
             currentPath = self.randomWalk(cx,cy)    
             for dd,dx,dy in currentPath:
                 # Fill all cells visited by the current path
@@ -74,9 +56,12 @@ class generator():
                         exit("Value not in range")
         #self.printMaze(self.xSize,self.ySize,self.field)
         self.addWalls()
+        self.setWallType()
+        self.setRoadType()
+        self.setPlayerPoints()
+        self.setSpawns()
         self.printMaze(self.xSize * 2 + 1,self.ySize * 2 + 1,self.walled_field)
         return self.walled_field
-
 
     def addWalls(self):
         # Extend maze to include spaces for walls
@@ -93,7 +78,95 @@ class generator():
                 elif self.walled_field[x][y] == field_v.SOUTH:
                     self.walled_field[x+1][y] = field_v.CORRIDOR
                 elif self.walled_field[x][y] == field_v.WEST:
-                    self.walled_field[x][y-1] = field_v.CORRIDOR    
+                    self.walled_field[x][y-1] = field_v.CORRIDOR   
+                elif self.walled_field[x][y] == field_v.START:
+                    self.walled_field[x][y] = field_v.CORRIDOR 
+
+    def setWallType(self):
+        for x in range(self.xSize*2+1):
+            for y in range(self.ySize*2+1):
+                if self.walled_field[x][y] == field_v.NOT_VISITED:
+                    count_neigh = 0
+                    if (x+1) < (self.xSize * 2 + 1):
+                        # print("x+1",end="")
+                        if self.walled_field[x+1][y] >= 20 or self.walled_field[x+1][y] == field_v.NOT_VISITED:
+                            count_neigh = count_neigh + 1
+                    if (y+1) < (self.ySize * 2 + 1):
+                        # print("y+1",end="")
+                        if self.walled_field[x][y+1] >= 20 or self.walled_field[x][y+1] == field_v.NOT_VISITED:
+                            count_neigh = count_neigh + 2                         
+                    if (x-1) >= 0:
+                        # print("x-1",end="")
+                        if self.walled_field[x-1][y] >= 20 or self.walled_field[x-1][y] == field_v.NOT_VISITED:
+                            count_neigh = count_neigh + 4    
+                    if (y-1) >= 0:
+                        # print("y-1",end="")
+                        if self.walled_field[x][y-1] >= 20 or self.walled_field[x][y-1] == field_v.NOT_VISITED:
+                            count_neigh = count_neigh + 8
+                    self.walled_field[x][y] = 20 + count_neigh
+                    # print()
+                    # print("currentWall: " + str(x) + ":" + str(y) + " = " + str(count_neigh))
+
+    def setRoadType(self):
+        for x in range(self.xSize*2+1):
+            for y in range(self.ySize*2+1):
+                if self.walled_field[x][y] > 0 and self.walled_field[x][y] < 20:
+                    count_neigh = 0
+                    if (x+1) < (self.xSize * 2 + 1):
+                        # print("x+1",end="")
+                        if self.walled_field[x+1][y] > 0 and self.walled_field[x+1][y] < 20:
+                            count_neigh = count_neigh + 1
+                    if (y+1) < (self.ySize * 2 + 1):
+                        # print("y+1",end="")
+                        if self.walled_field[x][y+1] > 0 and self.walled_field[x][y+1] < 20:
+                            count_neigh = count_neigh + 2                         
+                    if (x-1) >= 0:
+                        # print("x-1",end="")
+                        if self.walled_field[x-1][y] > 0 and self.walled_field[x-1][y] < 20:
+                            count_neigh = count_neigh + 4    
+                    if (y-1) >= 0:
+                        # print("y-1",end="")
+                        if self.walled_field[x][y-1] > 0 and self.walled_field[x][y-1] < 20:
+                            count_neigh = count_neigh + 8
+                    self.walled_field[x][y] = count_neigh
+                    # print()
+                    # print("currentWall: " + str(x) + ":" + str(y) + " = " + str(count_neigh))
+                                                   
+    def setPlayerPoints(self):
+        # print(self.xSize*2+1) 
+        # print(self.ySize*2+1)
+        # print(math.floor((self.ySize*2+1)*0.1)) 
+        # print(math.floor((self.ySize*2+1)*0.9))
+
+        list_of_ends = []      
+        for x in range(self.xSize*2+1):
+            for y in range(math.floor((self.ySize*2+1)*0.9),self.ySize*2+1):
+                if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:
+                    list_of_ends.append((x,y))
+        random.shuffle(list_of_ends)
+        e_x,e_y = list_of_ends.pop()
+        # print("end = " + str(e_x) + ":" + str(e_y))
+        self.walled_field[e_x][e_y] = draw_v.END
+        self.ending_point = (e_x,e_y)
+
+        list_of_starts = [] 
+        for x in range(self.xSize*2+1):
+            for y in range(math.floor((self.ySize*2+1)*0.1)):
+                if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:     
+                    list_of_starts.append((x,y))
+        random.shuffle(list_of_starts)
+        s_x,s_y = list_of_starts.pop()
+        # print("start = " + str(s_x) + ":" + str(s_y))
+        self.walled_field[s_x][s_y] = draw_v.START
+        self.starting_point = (s_x,s_y)
+
+    def getPlayerPoints(self):
+        return (self.starting_point,self.ending_point)
+
+        
+    def setSpawns(self):
+        print("nothing")
+
 
     def getNextCellX(self,p_x,dire):
         if dire == field_v.C_NORTH:
@@ -124,30 +197,78 @@ class generator():
         for i in range(x):
             s_line = ''
             for j in range(y):
-                debug = 0
+                debug = 1
                 if debug == 1:                
-                    if pField[i][j] == field_v.EAST:
-                        s_line += 'E;'
-                    elif pField[i][j] == field_v.C_EAST: 
-                        s_line += 'e;'               
-                    elif pField[i][j] == field_v.NORTH:
-                        s_line += 'N;'
-                    elif pField[i][j] == field_v.C_NORTH:
-                        s_line += 'n;' 
-                    elif pField[i][j] == field_v.WEST:
-                        s_line += 'W;' 
-                    elif pField[i][j] == field_v.C_WEST:
-                        s_line += 'w;' 
-                    elif pField[i][j] == field_v.SOUTH:
-                        s_line += 'S;'
-                    elif pField[i][j] == field_v.C_SOUTH:
-                        s_line += 's;'
-                    elif pField[i][j] == field_v.START:
-                        s_line += 'A;'
-                    elif pField[i][j] == field_v.CORRIDOR:
-                        s_line += 'C;'    
+                    if pField[i][j] == draw_v.RS_0:
+                        s_line += 'rX;'
+                    elif pField[i][j] == draw_v.RS_R:
+                        s_line += 'rR;'        
+                    elif pField[i][j] == draw_v.RS_U:
+                        s_line += 'rU;'                       
+                    elif pField[i][j] == draw_v.RS_RU:
+                        s_line += 'rRU;'    
+                    elif pField[i][j] == draw_v.RS_L:
+                        s_line += 'rL;'    
+                    elif pField[i][j] == draw_v.RS_LR:
+                        s_line += 'rLR;'    
+                    elif pField[i][j] == draw_v.RS_LU:
+                        s_line += 'rLU;'    
+                    elif pField[i][j] == draw_v.RS_LUR:
+                        s_line += 'rLUR;'   
+                    elif pField[i][j] == draw_v.RS_O:
+                        s_line += 'rO;'   
+                    elif pField[i][j] == draw_v.RS_OR:
+                        s_line += 'rOR;'    
+                    elif pField[i][j] == draw_v.RS_OU:
+                        s_line += 'rOU;'    
+                    elif pField[i][j] == draw_v.RS_ORU:
+                        s_line += 'rOUR;'    
+                    elif pField[i][j] == draw_v.RS_OL:
+                        s_line += 'rOL;'    
+                    elif pField[i][j] == draw_v.RS_OLR:
+                        s_line += 'rOLR;'    
+                    elif pField[i][j] == draw_v.RS_OLU:
+                        s_line += 'rOLU;'    
+                    elif pField[i][j] == draw_v.RS_OLUR:
+                        s_line += 'rOULR;' 
+                    elif pField[i][j] == draw_v.WS_0:
+                        s_line += 'wX;'
+                    elif pField[i][j] == draw_v.WS_R:
+                        s_line += 'wR;'        
+                    elif pField[i][j] == draw_v.WS_U:
+                        s_line += 'wU;'                       
+                    elif pField[i][j] == draw_v.WS_RU:
+                        s_line += 'wRU;'    
+                    elif pField[i][j] == draw_v.WS_L:
+                        s_line += 'wL;'    
+                    elif pField[i][j] == draw_v.WS_LR:
+                        s_line += 'wLR;'    
+                    elif pField[i][j] == draw_v.WS_LU:
+                        s_line += 'wLU;'    
+                    elif pField[i][j] == draw_v.WS_LUR:
+                        s_line += 'wLUR;'   
+                    elif pField[i][j] == draw_v.WS_O:
+                        s_line += 'wO;'   
+                    elif pField[i][j] == draw_v.WS_OR:
+                        s_line += 'wOR;'    
+                    elif pField[i][j] == draw_v.WS_OU:
+                        s_line += 'wOU;'    
+                    elif pField[i][j] == draw_v.WS_ORU:
+                        s_line += 'wOUR;'    
+                    elif pField[i][j] == draw_v.WS_OL:
+                        s_line += 'wOL;'    
+                    elif pField[i][j] == draw_v.WS_OLR:
+                        s_line += 'wOLR;'    
+                    elif pField[i][j] == draw_v.WS_OLU:
+                        s_line += 'wOLU;'    
+                    elif pField[i][j] == draw_v.WS_OLUR:
+                        s_line += 'wOULR;' 
+                    elif pField[i][j] == draw_v.START:
+                        s_line += 'START;'    
+                    elif pField[i][j] == draw_v.END:
+                        s_line += 'END;'                       
                     else:
-                        s_line += 'X;'
+                        s_line += '?;'
                 else:
                     if pField[i][j] in [field_v.EAST,field_v.C_EAST,field_v.NORTH,field_v.C_NORTH,field_v.WEST,field_v.C_WEST,field_v.SOUTH,field_v.C_SOUTH,field_v.START,field_v.CORRIDOR]:
                         s_line += ' '
@@ -218,5 +339,6 @@ class generator():
         #print(path)
         return path
 
-g_maze1 = generator()
-maze1 = g_maze1.generateMaze(50,100)
+if __name__=="__main__":
+    new_generator = Generator()
+    new_generator.generateMaze(10,10)
