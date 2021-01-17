@@ -8,6 +8,7 @@ Created on Thu Dec  3 08:27:00 2020
 
 import enum
 
+# enum for the map array during the random walk algorithm
 class field_v(enum.IntEnum):
     NOT_VISITED = 0
     EAST = 1
@@ -22,45 +23,47 @@ class field_v(enum.IntEnum):
     C_SOUTH = 14
     END = 15
 
-class draw_v(enum.IntEnum):
+# enum for the final returned version of the map array
+class draw_v(enum.IntEnum):    
     RS_0 = 0
-    RS_R = 1
-    RS_U = 2
+    RS_U = 1
+    RS_R = 2
     RS_RU = 3
-    RS_L = 4
-    RS_LR = 5
-    RS_LU = 6
-    RS_LUR = 7
-    RS_O = 8
-    RS_OR = 9
-    RS_OU = 10
-    RS_ORU = 11
+    RS_O = 4
+    RS_OU = 5
+    RS_OR = 6
+    RS_ORU = 7
+    RS_L = 8
+    RS_LU = 9
+    RS_LR = 10
+    RS_LUR = 11
     RS_OL = 12
-    RS_OLR = 13
-    RS_OLU = 14
-    RS_OLUR = 15    
+    RS_OLU = 13
+    RS_OLR = 14
+    RS_OLUR = 15 
 
     START = 16
     END = 17
     SPAWN = 18  
 
     WS_0 = 20
-    WS_R = 21
-    WS_U = 22
+    WS_U = 21
+    WS_R = 22
     WS_RU = 23
-    WS_L = 24
-    WS_LR = 25
-    WS_LU = 26
-    WS_LUR = 27
-    WS_O = 28
-    WS_OR = 29
-    WS_OU = 30
-    WS_ORU = 31
+    WS_O = 24
+    WS_OU = 25
+    WS_OR = 26
+    WS_ORU = 27
+    WS_L = 28
+    WS_LU = 29
+    WS_LR = 30
+    WS_LUR = 31
     WS_OL = 32
-    WS_OLR = 33
-    WS_OLU = 34
+    WS_OLU = 33
+    WS_OLR = 34
     WS_OLUR = 35    
 
+# return values for the cell checking during the random walk algorithm
 class return_v(enum.IntEnum):
     VALID = 0
     OCCUPIED = 1
@@ -70,6 +73,8 @@ class return_v(enum.IntEnum):
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 TILE_SIZE = 32
+PLAYER_X_SIZE = 20
+PLAYER_Y_SIZE = 20
 FPS = 60
 WINDOW_HEIGHT = 1312
 WINDOW_WIDTH = 1312

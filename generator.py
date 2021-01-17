@@ -55,11 +55,17 @@ class Generator():
                     except ValueError:                    
                         exit("Value not in range")
         #self.printMaze(self.xSize,self.ySize,self.field)
+        # expand maze and fit walls
         self.addWalls()
+        # set each wall-field to correct type regarding its neighbours
         self.setWallType()
+        # set each road-field to correct type regarding its neighbours
         self.setRoadType()
+        # set random starting point and ending point for player
         self.setPlayerPoints()
+
         self.setSpawns()
+        # just print the maze into a *.csv for debugging
         self.printMaze(self.xSize * 2 + 1,self.ySize * 2 + 1,self.walled_field)
         return self.walled_field
 
@@ -83,6 +89,7 @@ class Generator():
                     self.walled_field[x][y] = field_v.CORRIDOR 
 
     def setWallType(self):
+        # set each wall-field to correct type regarding its neighbours
         for x in range(self.xSize*2+1):
             for y in range(self.ySize*2+1):
                 if self.walled_field[x][y] == field_v.NOT_VISITED:
@@ -108,6 +115,7 @@ class Generator():
                     # print("currentWall: " + str(x) + ":" + str(y) + " = " + str(count_neigh))
 
     def setRoadType(self):
+        # set each road-field to correct type regarding its neighbours
         for x in range(self.xSize*2+1):
             for y in range(self.ySize*2+1):
                 if self.walled_field[x][y] > 0 and self.walled_field[x][y] < 20:
@@ -133,6 +141,8 @@ class Generator():
                     # print("currentWall: " + str(x) + ":" + str(y) + " = " + str(count_neigh))
                                                    
     def setPlayerPoints(self):
+        # set random starting point and ending point for player
+
         # print(self.xSize*2+1) 
         # print(self.ySize*2+1)
         # print(math.floor((self.ySize*2+1)*0.1)) 
@@ -157,7 +167,7 @@ class Generator():
         random.shuffle(list_of_starts)
         s_x,s_y = list_of_starts.pop()
         # print("start = " + str(s_x) + ":" + str(s_y))
-        self.walled_field[s_x][s_y] = draw_v.START
+        # self.walled_field[s_x][s_y] = draw_v.START
         self.starting_point = (s_x,s_y)
 
     def getPlayerPoints(self):
@@ -169,6 +179,7 @@ class Generator():
 
 
     def getNextCellX(self,p_x,dire):
+        # calculate the x coordinate of the next targeted field
         if dire == field_v.C_NORTH:
             p_x = p_x - 1
         elif dire == field_v.C_SOUTH:
@@ -176,6 +187,7 @@ class Generator():
         return p_x
     
     def getNextCellY(self,p_y,dire):
+        # calculate the y coordinate of the next targeted field
         if dire == field_v.C_EAST:
             p_y = p_y + 1
         elif dire == field_v.C_WEST:
@@ -193,6 +205,7 @@ class Generator():
             return return_v.OUTOFBOUND
 
     def printMaze(self,x,y,pField): 
+        # just print the maze into a *.csv for debugging
         f = open("maze.csv", "w")
         for i in range(x):
             s_line = ''
