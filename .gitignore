@@ -3,6 +3,9 @@
 *.csv
 *.xlsx
 
+#gimp
+*.xcf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
