@@ -8,9 +8,12 @@ Created on Thu Dec  3 08:27:00 2020
 import pygame
 from pygame import Rect
 import player as pla
+import enemy
+import models
 import os
 import math
-from map import Map
+import map
+import random
 import const as c
 
 # main file and switches between menu and maze
@@ -31,8 +34,9 @@ class Game():
         self.clock = pygame.time.Clock()
 
         # load classes for the map and the player
-        self.map = Map(self)   
+        self.map = map.Map(self)   
         self.player = pla.Player(self)
+        self.models = models.Models()
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -41,6 +45,11 @@ class Game():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
+                # toggle show markers
+                elif event.key == pygame.K_m:
+                    self.show_markers = not self.show_markers
+                elif event.key == pygame.K_t:
+                    self.tracking = not self.tracking
                 # set player velocity after key press
                 elif event.key == pygame.K_w:
                     self.player.velocity[1] = -self.player.speed * self.dt
@@ -59,7 +68,6 @@ class Game():
                         self.player.velocity[1] = self.player.velocity[1] * 2
                 # elif event.key == pygame.K_z: 
                 #     self.map.scrolling = not self.map.scrolling
-                #     print(self.map.scrolling)
             elif event.type == pygame.KEYUP:
                 # reset player velocity after key release
                 if event.key == pygame.K_w or event.key == pygame.K_s:
@@ -96,21 +104,9 @@ class Game():
         x_2 = math.floor((tmp_rect[0] + c.PLAYER_X_SIZE) / c.TILE_SIZE)
         y_2 = math.floor((tmp_rect[1] + c.PLAYER_Y_SIZE) / c.TILE_SIZE)
 
-        # add for collisions
-        collision = 0
+        ending_x, ending_y = self.ending_p
 
-        # check all for corners of the player for collision
-        if self.current_map[x_1][y_1] == c.draw_v.END:
-            collision += 1
-        if self.current_map[x_1][y_2] == c.draw_v.END :
-            collision += 2
-        if self.current_map[x_2][y_1] == c.draw_v.END :
-            collision += 4
-        if self.current_map[x_2][y_2] == c.draw_v.END :
-            collision += 8   
-        
-        # check if all four corners are on the target
-        if collision == 15:
+        if x_1 == x_2 == ending_x and y_1 == y_2 == ending_y:
             return True
         else:
             return False
@@ -176,8 +172,122 @@ class Game():
         # if more than two corners detect a collision, remove all velocity   
         else:
             self.player.velocity[0] = 0 
-            self.player.velocity[1] = 0                         
-        
+            self.player.velocity[1] = 0  
+
+    def update_player(self):
+
+            # get position for player after next movement
+            next_x, next_y= self.player.get_next_pos()
+
+            x_velo = self.player.velocity[0]
+            y_velo = self.player.velocity[1]
+
+            # check if the player has moved if any collision occurs
+            if next_x != self.player.rect[0] or next_y != self.player.rect[1]:
+                self.check_collision(next_x,next_y)
+
+            # update player position and draw him on top of map
+            self.player.update()
+
+            if self.tracking: self.map.update_tracker(self.player.rect)
+
+            self.player.velocity[0] = x_velo
+            self.player.velocity[1] = y_velo   
+
+    def set_next_target(self, enemy, last_direction):
+        pass
+
+    def update_enemies(self):
+        for enemy in self.enemies:  
+            next_x, next_y= enemy.get_next_pos()
+
+            if enemy.velocity[0] > 0: # DOWN
+                if next_x < enemy.target[0]:
+                    enemy.update()
+                else:
+                    self.set_next_target(enemy, c.direction.DOWN)
+            elif enemy.velocity[0] < 0: # UP
+                if next_x > enemy.target[0]:
+                    enemy.update()
+                else:
+                    self.set_next_target(enemy, c.direction.UP)
+            elif enemy.velocity[1] > 0: # RIGHT
+                if next_x < enemy.target[1]:
+                    enemy.update()
+                else:
+                    self.set_next_target(enemy, c.direction.RIGHT)
+            elif enemy.velocity[1] < 0: # LEFT
+                if next_x > enemy.target[1]:
+                    enemy.update()
+                else:
+                    self.set_next_target(enemy, c.direction.LEFT)
+            else:
+                self.set_next_target(enemy, -1)
+
+
+
+
+
+            if self.check_npc_collision(next_x,next_y) or (enemy.velocity[0] + enemy.velocity[1]) == 0:
+                dir_list = self.get_dir_list(enemy.rect[0],enemy.rect[1],enemy.speed * self.dt)
+                random.shuffle(dir_list)
+                new_dir = dir_list.pop()
+                if new_dir == c.direction.DOWN:
+                    enemy.velocity[0] = enemy.speed * self.dt 
+                    enemy.velocity[1] = 0  
+                elif new_dir == c.direction.UP:
+                    enemy.velocity[0] = -enemy.speed * self.dt
+                    enemy.velocity[1] = 0
+                elif new_dir == c.direction.RIGHT:
+                    enemy.velocity[0] = 0
+                    enemy.velocity[1] = enemy.speed * self.dt
+                elif new_dir == c.direction.LEFT:
+                    enemy.velocity[0] = 0
+                    enemy.velocity[1] = -enemy.speed * self.dt
+            else:
+                current_direction = -1
+                if enemy.velocity[0] > 0:
+                    current_direction = c.direction.DOWN
+                elif enemy.velocity[0] < 0:
+                    current_direction = c.direction.UP
+                elif enemy.velocity[1] > 0:
+                    current_direction = c.direction.RIGHT
+                elif enemy.velocity[1] < 0:
+                    current_direction = c.direction.LEFT 
+                dir_list = self.get_dir_list(enemy.rect[0],enemy.rect[1],enemy.speed * self.dt,current_direction)
+                current_opposite_direction = -1
+                if enemy.velocity[0] > 0:
+                    current_opposite_direction = c.direction.UP
+                elif enemy.velocity[0] < 0:
+                    current_opposite_direction = c.direction.DOWN
+                elif enemy.velocity[1] > 0:
+                    current_opposite_direction = c.direction.LEFT
+                elif enemy.velocity[1] < 0:
+                    current_opposite_direction = c.direction.RIGHT       
+                             
+                if (current_opposite_direction in dir_list) and (len(dir_list) > 1): dir_list.remove(current_opposite_direction)
+
+                random.shuffle(dir_list)
+                new_dir = dir_list.pop()
+                if new_dir == c.direction.DOWN:
+                    enemy.velocity[0] = enemy.speed * self.dt 
+                    enemy.velocity[1] = 0  
+                elif new_dir == c.direction.UP:
+                    enemy.velocity[0] = -enemy.speed * self.dt
+                    enemy.velocity[1] = 0
+                elif new_dir == c.direction.RIGHT:
+                    enemy.velocity[0] = 0
+                    enemy.velocity[1] = enemy.speed * self.dt
+                elif new_dir == c.direction.LEFT:
+                    enemy.velocity[0] = 0
+                    enemy.velocity[1] = -enemy.speed * self.dt                
+                
+            new_x, new_y = enemy.get_next_pos()
+            if self.check_npc_collision(new_x,new_y):
+                enemy.velocity = [ 0 , 0 ] 
+                print("ERROR")   
+            enemy.update()
+
     def run_game(self, x_size, y_size):
 
         # load new map from generator
@@ -187,6 +297,11 @@ class Game():
         self.starting_p = self.map.starting_p
         self.ending_p = self.map.ending_p
 
+        # get amount and position of enemies
+        self.enemies = []
+        for spawn in self.map.spawn_p:
+            self.enemies += [enemy.Enemy(self,spawn,self.models)]
+
         # set starting coordinates for player
         s_p_0, s_p_1 = self.starting_p
         self.player.rect[0] += s_p_0*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_X_SIZE)/2)
@@ -194,6 +309,12 @@ class Game():
 
         # variable for state of mouse button
         # self.mouse_cap = False
+
+        # track the visited tiles if true
+        self.tracking = False
+
+        # variable for showing of tiles visited by the player
+        self.show_markers = False
 
         # main loop variable => false if won or quit
         self.running = True   
@@ -212,21 +333,11 @@ class Game():
             # draw map from array
             self.map.draw()
 
-            # get position for player after next movement
-            next_x, next_y= self.player.getNextPos()
+            # update and draw player
+            self.update_player()
 
-            x_velo = self.player.velocity[0]
-            y_velo = self.player.velocity[1]
-
-            # check if the player has moved if any collision occurs
-            if next_x != self.player.rect[0] or next_y != self.player.rect[1]:
-                self.check_collision(next_x,next_y)
-
-            # update player position and draw him on top of map
-            self.player.update()
-
-            self.player.velocity[0] = x_velo
-            self.player.velocity[1] = y_velo
+            # move, update and draw enemies
+            self.update_enemies()
 
             # if the game is running check if the player has reached the target position
             if self.running: self.running = not self.check_target_completion()

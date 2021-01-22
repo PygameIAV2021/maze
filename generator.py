@@ -16,13 +16,15 @@ class Generator():
     def __init__(self):
         random.seed(a=None, version=2)
         
-    def generateMaze(self, xSize, ySize):
+    def generate_maze(self, xSize, ySize):
         self.xSize = xSize
         self.ySize = ySize
+        self.finalxSize = self.xSize * 2 + 1
+        self.finalySize = self.ySize * 2 + 1
         self.starting_point = (0,0)
         self.ending_point = (0,0)
         # Two-dimensional list containing current maze including walls
-        self.walled_field = [[field_v.NOT_VISITED] * (self.ySize * 2 + 1) for i in range(self.xSize * 2 + 1)]  
+        self.walled_field = [([field_v.NOT_VISITED] * (self.finalySize)) for i in range(self.finalxSize)]  
         # Remaining cells
         self.remainingCells = list(range(0,self.ySize*self.xSize))
         # Two-dimensional list containing current maze
@@ -40,7 +42,7 @@ class Generator():
             cx = math.floor(currentCellNr/self.ySize)
             cy = currentCellNr%self.ySize
             # print("currentCell: " + str(cx) + ":" + str(cy))
-            currentPath = self.randomWalk(cx,cy)    
+            currentPath = self.random_walk(cx,cy)    
             for dd,dx,dy in currentPath:
                 # Fill all cells visited by the current path
                 self.field[dx][dy] = dd
@@ -56,27 +58,31 @@ class Generator():
                         exit("Value not in range")
         #self.printMaze(self.xSize,self.ySize,self.field)
         # expand maze and fit walls
-        self.addWalls()
+        self.add_walls()
         # set each wall-field to correct type regarding its neighbours
-        self.setWallType()
+        self.set_wall_type()
         # set each road-field to correct type regarding its neighbours
-        self.setRoadType()
+        self.set_road_type()
         # set random starting point and ending point for player
-        self.setPlayerPoints()
+        self.set_player_points()
 
-        self.setSpawns()
+        self.set_spawns()
         # just print the maze into a *.csv for debugging
-        self.printMaze(self.xSize * 2 + 1,self.ySize * 2 + 1,self.walled_field)
+        self.print_maze(self.xSize * 2 + 1,self.ySize * 2 + 1,self.walled_field)
         return self.walled_field
 
-    def addWalls(self):
+    def return_maze_size(self):
+        return (self.finalxSize, self.finalySize)
+
+
+    def add_walls(self):
         # Extend maze to include spaces for walls
         for x in range(self.xSize):
             for y in range(self.ySize):                
                 self.walled_field[1+x*2][1+y*2] = self.field[x][y]
         # Include the corridors between the cells
-        for x in range(self.xSize*2+1):
-            for y in range(self.ySize*2+1):
+        for x in range(self.finalxSize):
+            for y in range(self.finalySize):
                 if self.walled_field[x][y] == field_v.NORTH:
                     self.walled_field[x-1][y] = field_v.CORRIDOR
                 elif self.walled_field[x][y] == field_v.EAST:
@@ -88,17 +94,17 @@ class Generator():
                 elif self.walled_field[x][y] == field_v.START:
                     self.walled_field[x][y] = field_v.CORRIDOR 
 
-    def setWallType(self):
+    def set_wall_type(self):
         # set each wall-field to correct type regarding its neighbours
-        for x in range(self.xSize*2+1):
-            for y in range(self.ySize*2+1):
+        for x in range(self.finalxSize):
+            for y in range(self.finalySize):
                 if self.walled_field[x][y] == field_v.NOT_VISITED:
                     count_neigh = 0
-                    if (x+1) < (self.xSize * 2 + 1):
+                    if (x+1) < (self.finalxSize):
                         # print("x+1",end="")
                         if self.walled_field[x+1][y] >= 20 or self.walled_field[x+1][y] == field_v.NOT_VISITED:
                             count_neigh = count_neigh + 1
-                    if (y+1) < (self.ySize * 2 + 1):
+                    if (y+1) < (self.finalySize):
                         # print("y+1",end="")
                         if self.walled_field[x][y+1] >= 20 or self.walled_field[x][y+1] == field_v.NOT_VISITED:
                             count_neigh = count_neigh + 2                         
@@ -114,17 +120,17 @@ class Generator():
                     # print()
                     # print("currentWall: " + str(x) + ":" + str(y) + " = " + str(count_neigh))
 
-    def setRoadType(self):
+    def set_road_type(self):
         # set each road-field to correct type regarding its neighbours
-        for x in range(self.xSize*2+1):
-            for y in range(self.ySize*2+1):
+        for x in range(self.finalxSize):
+            for y in range(self.finalySize):
                 if self.walled_field[x][y] > 0 and self.walled_field[x][y] < 20:
                     count_neigh = 0
-                    if (x+1) < (self.xSize * 2 + 1):
+                    if (x+1) < (self.finalxSize):
                         # print("x+1",end="")
                         if self.walled_field[x+1][y] > 0 and self.walled_field[x+1][y] < 20:
                             count_neigh = count_neigh + 1
-                    if (y+1) < (self.ySize * 2 + 1):
+                    if (y+1) < (self.finalySize):
                         # print("y+1",end="")
                         if self.walled_field[x][y+1] > 0 and self.walled_field[x][y+1] < 20:
                             count_neigh = count_neigh + 2                         
@@ -140,7 +146,7 @@ class Generator():
                     # print()
                     # print("currentWall: " + str(x) + ":" + str(y) + " = " + str(count_neigh))
                                                    
-    def setPlayerPoints(self):
+    def set_player_points(self):
         # set random starting point and ending point for player
 
         # print(self.xSize*2+1) 
@@ -149,19 +155,19 @@ class Generator():
         # print(math.floor((self.ySize*2+1)*0.9))
 
         list_of_ends = []      
-        for x in range(self.xSize*2+1):
-            for y in range(math.floor((self.ySize*2+1)*0.9),self.ySize*2+1):
+        for x in range(self.finalxSize):
+            for y in range(math.floor((self.finalySize)*0.9),self.finalySize):
                 if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:
                     list_of_ends.append((x,y))
         random.shuffle(list_of_ends)
         e_x,e_y = list_of_ends.pop()
         # print("end = " + str(e_x) + ":" + str(e_y))
-        self.walled_field[e_x][e_y] = draw_v.END
+        # self.walled_field[e_x][e_y] = draw_v.END
         self.ending_point = (e_x,e_y)
 
         list_of_starts = [] 
-        for x in range(self.xSize*2+1):
-            for y in range(math.floor((self.ySize*2+1)*0.1)):
+        for x in range(self.finalxSize):
+            for y in range(math.floor((self.finalySize)*0.1)):
                 if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:     
                     list_of_starts.append((x,y))
         random.shuffle(list_of_starts)
@@ -170,15 +176,18 @@ class Generator():
         # self.walled_field[s_x][s_y] = draw_v.START
         self.starting_point = (s_x,s_y)
 
-    def getPlayerPoints(self):
+    def get_player_points(self):
         return (self.starting_point,self.ending_point)
 
         
-    def setSpawns(self):
-        print("nothing")
+    def set_spawns(self):
+        self.enemy_spawns = [(1,1)]
+
+    def get_spawn_points(self):
+        return self.enemy_spawns
 
 
-    def getNextCellX(self,p_x,dire):
+    def get_next_cell_x(self,p_x,dire):
         # calculate the x coordinate of the next targeted field
         if dire == field_v.C_NORTH:
             p_x = p_x - 1
@@ -186,7 +195,7 @@ class Generator():
             p_x = p_x + 1
         return p_x
     
-    def getNextCellY(self,p_y,dire):
+    def get_next_cell_y(self,p_y,dire):
         # calculate the y coordinate of the next targeted field
         if dire == field_v.C_EAST:
             p_y = p_y + 1
@@ -194,7 +203,7 @@ class Generator():
             p_y = p_y - 1
         return p_y
 
-    def checkCell(self,x,y):
+    def check_cell(self,x,y):
         # Check if cell is empty and inside boundaries
         if x >= 0 and y >= 0  and y < self.ySize and x < self.xSize:
             if self.field[x][y] in [field_v.EAST,field_v.NORTH,field_v.WEST,field_v.SOUTH,field_v.START,field_v.CORRIDOR]:
@@ -204,7 +213,7 @@ class Generator():
         else:
             return return_v.OUTOFBOUND
 
-    def printMaze(self,x,y,pField): 
+    def print_maze(self,x,y,pField): 
         # just print the maze into a *.csv for debugging
         f = open("maze.csv", "w")
         for i in range(x):
@@ -290,7 +299,7 @@ class Generator():
             f.write(s_line + '\n')
         f.close()
                         
-    def randomWalk(self, startx, starty):
+    def random_walk(self, startx, starty):
         # Resulting path
         path = []
         direction = -1
@@ -310,9 +319,9 @@ class Generator():
             # Retry until a valid or occupied cell is found
             while result != return_v.VALID and result != return_v.OCCUPIED:
                 direction = dir_list.pop()
-                new_x = self.getNextCellX(current_x,direction)
-                new_y = self.getNextCellY(current_y,direction)
-                result = self.checkCell(new_x,new_y)  
+                new_x = self.get_next_cell_x(current_x,direction)
+                new_y = self.get_next_cell_y(current_y,direction)
+                result = self.check_cell(new_x,new_y)  
             # Found valid cell
             if result == return_v.VALID:                
                 # Add direction to current cell
@@ -345,8 +354,8 @@ class Generator():
             if direct == field_v.C_SOUTH:
                 path.append((field_v.SOUTH,c_x,c_y))
             # Goto next cell based of direction in current cell
-            c_x = self.getNextCellX(c_x,direct)
-            c_y = self.getNextCellY(c_y,direct) 
+            c_x = self.get_next_cell_x(c_x,direct)
+            c_y = self.get_next_cell_y(c_y,direct) 
         #print("pathend: " + str(stop_x) + ":" + str(stop_y))  
         #print("path = ",end='')
         #print(path)
