@@ -8,6 +8,26 @@ Created on Thu Dec  3 08:27:00 2020
 
 import enum
 
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+TILE_SIZE = 32
+PLAYER_X_SIZE = 20
+PLAYER_Y_SIZE = 20
+ENEMY_X_SIZE = 30
+ENEMY_Y_SIZE = 30
+PLAYER_SPEED = 150
+ENEMY_SPEED = 100
+FPS = 60
+WINDOW_HEIGHT = 1312
+WINDOW_WIDTH = 1312
+
+# emum for direction of models
+class direction(enum.IntEnum):
+    UP = 0
+    LEFT = 1
+    DOWN = 2
+    RIGHT = 3
+
 # enum for the map array during the random walk algorithm
 class field_v(enum.IntEnum):
     NOT_VISITED = 0
@@ -61,7 +81,12 @@ class draw_v(enum.IntEnum):
     WS_OL = 32
     WS_OLU = 33
     WS_OLR = 34
-    WS_OLUR = 35    
+    WS_OLUR = 35  
+
+class base_id(enum.IntEnum):
+    ROAD = 0
+    WALL = 1  
+    END = 2
 
 # return values for the cell checking during the random walk algorithm
 class return_v(enum.IntEnum):
@@ -69,12 +94,3 @@ class return_v(enum.IntEnum):
     OCCUPIED = 1
     OUTOFBOUND = 2
     INVALID = 99
-
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-TILE_SIZE = 32
-PLAYER_X_SIZE = 20
-PLAYER_Y_SIZE = 20
-FPS = 60
-WINDOW_HEIGHT = 1312
-WINDOW_WIDTH = 1312
