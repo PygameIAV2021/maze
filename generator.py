@@ -182,16 +182,17 @@ class Generator():
         
     def set_spawns(self):
         list_of_spawns = []      
-        for x in range(math.floor((self.finalxSize)*0.5),self.finalxSize):
-            for y in range(math.floor((self.finalySize)*0.5),self.finalySize):
-                if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:
-                    list_of_spawns.append((x,y))
+        for x in range(0,self.finalxSize):
+            for y in range(0,self.finalySize):
+                if x > math.floor(self.finalxSize / 2) or y > math.floor(self.finalySize / 2): 
+                    if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:
+                        list_of_spawns.append((x,y))
 
         random.shuffle(list_of_spawns)
 
         self.enemy_spawns = []
 
-        for n in range(0,4):
+        for n in range(0,6):
             if len(list_of_spawns) > 0:
                 self.enemy_spawns += [list_of_spawns.pop()]
         

@@ -99,14 +99,12 @@ class Game():
             tmp_rect[1] += self.map.offset[1]
 
         # calculate the postition of the player in the map array
-        x_1 = math.floor(tmp_rect[0] / c.TILE_SIZE)
-        y_1 = math.floor(tmp_rect[1] / c.TILE_SIZE) 
-        x_2 = math.floor((tmp_rect[0] + c.PLAYER_X_SIZE) / c.TILE_SIZE)
-        y_2 = math.floor((tmp_rect[1] + c.PLAYER_Y_SIZE) / c.TILE_SIZE)
+        x = math.floor((tmp_rect[0] + (c.PLAYER_X_SIZE / 2)) / c.TILE_SIZE)
+        y = math.floor((tmp_rect[1] + (c.PLAYER_Y_SIZE / 2)) / c.TILE_SIZE) 
 
         ending_x, ending_y = self.ending_p
 
-        if x_1 == x_2 == ending_x and y_1 == y_2 == ending_y:
+        if x == ending_x and y == ending_y:
             return True
         else:
             return False
@@ -119,11 +117,11 @@ class Game():
             tmp_rect[0] += self.map.offset[0]
             tmp_rect[1] += self.map.offset[1]
 
-        # calculate the postition of the player in the map array
-        x_1 = math.floor(tmp_rect[0] / c.TILE_SIZE)
-        y_1 = math.floor(tmp_rect[1] / c.TILE_SIZE) 
-        x_2 = math.floor((tmp_rect[0] + c.PLAYER_X_SIZE) / c.TILE_SIZE)
-        y_2 = math.floor((tmp_rect[1] + c.PLAYER_Y_SIZE) / c.TILE_SIZE)
+        # calculate the postition of the player in the map array and add the offset for smaller collision rectangle
+        x_1 = math.floor((tmp_rect[0] + c.COLLISION_OFFSET_LEFT) / c.TILE_SIZE)
+        y_1 = math.floor((tmp_rect[1] + c.COLLISION_OFFSET_TOP) / c.TILE_SIZE) 
+        x_2 = math.floor((tmp_rect[0] + c.PLAYER_X_SIZE  - (2 * c.COLLISION_OFFSET_RIGHT)) / c.TILE_SIZE)
+        y_2 = math.floor((tmp_rect[1] + c.PLAYER_Y_SIZE  - (2 * c.COLLISION_OFFSET_BOTTOM)) / c.TILE_SIZE)
 
         # add for collisions
         collision = 0
@@ -278,9 +276,7 @@ class Game():
                     self.set_next_target(enemy, c.direction.UP)
             
             else:
-                self.set_next_target(enemy, -1)
-
-            
+                self.set_next_target(enemy, -1)            
 
 
     def run_game(self, x_size, y_size):
