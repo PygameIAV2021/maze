@@ -195,7 +195,59 @@ class Game():
             self.player.velocity[1] = y_velo   
 
     def set_next_target(self, enemy, last_direction):
-        pass
+        current_x = math.floor(enemy.target[0] / c.TILE_SIZE)
+        current_y = math.floor(enemy.target[1] / c.TILE_SIZE)
+
+        enemy.update_to(enemy.target[0],enemy.target[1])
+
+        direction = []
+
+        if self.current_map[current_x-1][current_y] >= 0 and self.current_map[current_x-1][current_y] <= 15:
+            direction += [c.direction.LEFT]
+        if self.current_map[current_x+1][current_y] >= 0 and self.current_map[current_x+1][current_y] <= 15:
+            direction += [c.direction.RIGHT]
+        if self.current_map[current_x][current_y-1] >= 0 and self.current_map[current_x][current_y-1] <= 15:
+            direction += [c.direction.UP]
+        if self.current_map[current_x][current_y+1] >= 0 and self.current_map[current_x][current_y+1] <= 15:
+            direction += [c.direction.DOWN]
+
+
+        last_opposite_direction = -1
+        if last_direction == c.direction.UP:
+            last_opposite_direction = c.direction.DOWN
+        elif last_direction == c.direction.DOWN:
+            last_opposite_direction = c.direction.UP  
+        elif last_direction == c.direction.RIGHT:
+            last_opposite_direction = c.direction.LEFT
+        elif last_direction == c.direction.LEFT:
+            last_opposite_direction = c.direction.RIGHT
+
+        if len(direction) > 1 and last_opposite_direction in range(0,4):
+            direction.remove(last_opposite_direction)
+
+        random.shuffle(direction)
+
+        new_direction = direction.pop()
+
+        if new_direction == c.direction.UP:
+            enemy.velocity[0] = 0
+            enemy.velocity[1] = -enemy.speed * self.dt
+            enemy.target[1] -= c.TILE_SIZE
+
+        elif new_direction == c.direction.DOWN:
+            enemy.velocity[0] = 0
+            enemy.velocity[1] = enemy.speed * self.dt
+            enemy.target[1] += c.TILE_SIZE
+
+        elif new_direction == c.direction.LEFT:
+            enemy.velocity[0] = -enemy.speed * self.dt
+            enemy.velocity[1] = 0
+            enemy.target[0] -= c.TILE_SIZE
+
+        elif new_direction == c.direction.RIGHT:
+            enemy.velocity[0] = enemy.speed * self.dt
+            enemy.velocity[1] = 0
+            enemy.target[0] += c.TILE_SIZE
 
     def update_enemies(self):
         for enemy in self.enemies:  
@@ -205,88 +257,31 @@ class Game():
                 if next_x < enemy.target[0]:
                     enemy.update()
                 else:
-                    self.set_next_target(enemy, c.direction.DOWN)
+                    self.set_next_target(enemy, c.direction.RIGHT)
+            
             elif enemy.velocity[0] < 0: # UP
                 if next_x > enemy.target[0]:
                     enemy.update()
                 else:
-                    self.set_next_target(enemy, c.direction.UP)
-            elif enemy.velocity[1] > 0: # RIGHT
-                if next_x < enemy.target[1]:
-                    enemy.update()
-                else:
-                    self.set_next_target(enemy, c.direction.RIGHT)
-            elif enemy.velocity[1] < 0: # LEFT
-                if next_x > enemy.target[1]:
-                    enemy.update()
-                else:
                     self.set_next_target(enemy, c.direction.LEFT)
+            
+            elif enemy.velocity[1] > 0: # RIGHT
+                if next_y < enemy.target[1]:
+                    enemy.update()
+                else:
+                    self.set_next_target(enemy, c.direction.DOWN)
+            
+            elif enemy.velocity[1] < 0: # LEFT
+                if next_y > enemy.target[1]:
+                    enemy.update()
+                else:
+                    self.set_next_target(enemy, c.direction.UP)
+            
             else:
                 self.set_next_target(enemy, -1)
 
+            
 
-
-
-
-            if self.check_npc_collision(next_x,next_y) or (enemy.velocity[0] + enemy.velocity[1]) == 0:
-                dir_list = self.get_dir_list(enemy.rect[0],enemy.rect[1],enemy.speed * self.dt)
-                random.shuffle(dir_list)
-                new_dir = dir_list.pop()
-                if new_dir == c.direction.DOWN:
-                    enemy.velocity[0] = enemy.speed * self.dt 
-                    enemy.velocity[1] = 0  
-                elif new_dir == c.direction.UP:
-                    enemy.velocity[0] = -enemy.speed * self.dt
-                    enemy.velocity[1] = 0
-                elif new_dir == c.direction.RIGHT:
-                    enemy.velocity[0] = 0
-                    enemy.velocity[1] = enemy.speed * self.dt
-                elif new_dir == c.direction.LEFT:
-                    enemy.velocity[0] = 0
-                    enemy.velocity[1] = -enemy.speed * self.dt
-            else:
-                current_direction = -1
-                if enemy.velocity[0] > 0:
-                    current_direction = c.direction.DOWN
-                elif enemy.velocity[0] < 0:
-                    current_direction = c.direction.UP
-                elif enemy.velocity[1] > 0:
-                    current_direction = c.direction.RIGHT
-                elif enemy.velocity[1] < 0:
-                    current_direction = c.direction.LEFT 
-                dir_list = self.get_dir_list(enemy.rect[0],enemy.rect[1],enemy.speed * self.dt,current_direction)
-                current_opposite_direction = -1
-                if enemy.velocity[0] > 0:
-                    current_opposite_direction = c.direction.UP
-                elif enemy.velocity[0] < 0:
-                    current_opposite_direction = c.direction.DOWN
-                elif enemy.velocity[1] > 0:
-                    current_opposite_direction = c.direction.LEFT
-                elif enemy.velocity[1] < 0:
-                    current_opposite_direction = c.direction.RIGHT       
-                             
-                if (current_opposite_direction in dir_list) and (len(dir_list) > 1): dir_list.remove(current_opposite_direction)
-
-                random.shuffle(dir_list)
-                new_dir = dir_list.pop()
-                if new_dir == c.direction.DOWN:
-                    enemy.velocity[0] = enemy.speed * self.dt 
-                    enemy.velocity[1] = 0  
-                elif new_dir == c.direction.UP:
-                    enemy.velocity[0] = -enemy.speed * self.dt
-                    enemy.velocity[1] = 0
-                elif new_dir == c.direction.RIGHT:
-                    enemy.velocity[0] = 0
-                    enemy.velocity[1] = enemy.speed * self.dt
-                elif new_dir == c.direction.LEFT:
-                    enemy.velocity[0] = 0
-                    enemy.velocity[1] = -enemy.speed * self.dt                
-                
-            new_x, new_y = enemy.get_next_pos()
-            if self.check_npc_collision(new_x,new_y):
-                enemy.velocity = [ 0 , 0 ] 
-                print("ERROR")   
-            enemy.update()
 
     def run_game(self, x_size, y_size):
 

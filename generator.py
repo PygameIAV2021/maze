@@ -155,7 +155,7 @@ class Generator():
         # print(math.floor((self.ySize*2+1)*0.9))
 
         list_of_ends = []      
-        for x in range(self.finalxSize):
+        for x in range(math.floor((self.finalxSize)*0.9),self.finalxSize):
             for y in range(math.floor((self.finalySize)*0.9),self.finalySize):
                 if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:
                     list_of_ends.append((x,y))
@@ -166,7 +166,7 @@ class Generator():
         self.ending_point = (e_x,e_y)
 
         list_of_starts = [] 
-        for x in range(self.finalxSize):
+        for x in range(math.floor((self.finalxSize)*0.1)):
             for y in range(math.floor((self.finalySize)*0.1)):
                 if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:     
                     list_of_starts.append((x,y))
@@ -181,7 +181,20 @@ class Generator():
 
         
     def set_spawns(self):
-        self.enemy_spawns = [(1,1)]
+        list_of_spawns = []      
+        for x in range(math.floor((self.finalxSize)*0.5),self.finalxSize):
+            for y in range(math.floor((self.finalySize)*0.5),self.finalySize):
+                if self.walled_field[x][y] < 20 and self.walled_field[x][y] > 0:
+                    list_of_spawns.append((x,y))
+
+        random.shuffle(list_of_spawns)
+
+        self.enemy_spawns = []
+
+        for n in range(0,4):
+            if len(list_of_spawns) > 0:
+                self.enemy_spawns += [list_of_spawns.pop()]
+        
 
     def get_spawn_points(self):
         return self.enemy_spawns

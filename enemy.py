@@ -65,12 +65,11 @@ class Enemy(pygame.sprite.Sprite):
         elif self.velocity[0] < 0:
             self.direction = c.direction.LEFT
 
-        # draw player on map self.state * self.direction *
-        src = Rect(0 * c.ENEMY_X_SIZE, 0 * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
+        src = Rect(self.state * c.ENEMY_X_SIZE, self.direction * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
         for sprite in self.model:
             self.screen.blit(sprite, self.rect, src) 
 
-    def update(self,x,y):
+    def update_to(self,x,y):
         # calculate next position
         self.rect[0] = x
         self.rect[1] = y 
@@ -93,7 +92,7 @@ class Enemy(pygame.sprite.Sprite):
         elif self.velocity[0] < 0:
             self.direction = c.direction.LEFT
 
-        # draw player on map self.state * self.direction *
-        src = Rect(0 * c.ENEMY_X_SIZE, 0 * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
+        # draw player on map
+        src = Rect(self.state * c.ENEMY_X_SIZE, self.direction * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
         for sprite in self.model:
             self.screen.blit(sprite, self.rect, src)        
