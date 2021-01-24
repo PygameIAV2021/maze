@@ -5,47 +5,42 @@ Created on Thu Dec  3 08:27:00 2020
 
 @author: jan
 """
-
-import game
 import pygame
 from pygame import Rect
-import random
-import generator
-import const as c
 import os
 import math
+import random
+
+import generator
+import const as c
+
 
 class Map():
     def __init__(self, game):
+
         self.game = game
         self.screen = game.screen
         
         self.scrolling = False
         
-        self.load_basetiles()
-        self.load_bordertiles()
-        self.load_markertiles()
+        self.basetiles = pygame.image.load(os.path.join("images", "base.png")).convert_alpha()
+        self.rect = self.basetiles.get_rect()
+        self.bordertiles = pygame.image.load(os.path.join("images", "borders.png")).convert_alpha()
+        self.markertiles = pygame.image.load(os.path.join("images", "markers.png")).convert_alpha()
 
         self.generator = generator.Generator()
 
         self.offset = (0, 0)
+        
                 
     def scroll(self, rel):
+
         if not self.scrolling: return
 
         self.offset = (
             self.offset[0] + rel[0],
             self.offset[1] + rel[1] )
         
-    def load_basetiles(self, image="base.png"):
-        self.basetiles = pygame.image.load(os.path.join("images", image)).convert_alpha()
-        self.rect = self.basetiles.get_rect()
-
-    def load_bordertiles(self, image="borders.png"):
-        self.bordertiles = pygame.image.load(os.path.join("images", image)).convert_alpha()
-
-    def load_markertiles(self, image="markers.png"):
-        self.markertiles = pygame.image.load(os.path.join("images", image)).convert_alpha()
                     
     def load_map(self, size_x, size_y):
 
@@ -70,6 +65,7 @@ class Map():
         self.spawn_p = self.generator.get_spawn_points()
         return self.map
 
+
     def get_weighted_int(self):
 
         # Generate random number with weights
@@ -83,13 +79,17 @@ class Map():
         else:
             return 0
 
+
     def update_tracker(self, rect):
+
         x = math.floor((rect[0] + (c.PLAYER_X_SIZE / 2)) / c.TILE_SIZE)
         y = math.floor((rect[1] + (c.PLAYER_Y_SIZE / 2))/ c.TILE_SIZE) 
         if self.tracker[x][y] == 0:
             self.tracker[x][y] = 1
+
             
     def draw(self):
+
         # loop all tiles, and draw        
         for y in range( self.tiles_y ):
                 for x in range( self.tiles_x ):

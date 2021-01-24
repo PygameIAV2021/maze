@@ -9,46 +9,89 @@ Created on Wed Jan  20 10:27:00 2021
 import pygame
 import random
 import os
+
 import const as c
 
 class Models():
     def __init__(self):
+
         self.load_all_images()
 
-    def load_all_images(self):
-        self.body = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "BODY_skeleton.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4))
-        
-        self.heads = [pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "HEAD_robe_hood.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4)),
-                        pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "HEAD_plate_armor_helmet.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4)),
-                        pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "HEAD_chain_armor_helmet.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4))]
-        
-        self.belt = [pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "BELT_rope.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4)),
-                        pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "BELT_leather.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4))]
-                
-        self.torso = [pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "TORSO_robe_shirt_brown.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4)),
-                        pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "TORSO_plate_armor_torso.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4)),
-                        pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "TORSO_chain_armor_torso.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4))]
-        
-        self.legs = [pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "LEGS_robe_skirt.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4)),
-                        pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "LEGS_plate_armor_pants.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4))]
 
-        self.feet = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "FEET_plate_armor_shoes.png")).convert_alpha(),(c.ENEMY_X_SIZE * 9, c.ENEMY_Y_SIZE * 4))
+    def load_all_images(self):
+
+        walk_path = os.path.join("images","walk")
+
+        slash_path = os.path.join("images","slash")
+
+        walk_x = c.ENEMY_X_SIZE * c.WALK_ANIMATION_LENGTH
+        walk_y = c.ENEMY_Y_SIZE * 4
+
+        slash_x = c.ENEMY_X_SIZE * c.SLASH_ANIMATION_LENGTH
+        slash_y =  c.ENEMY_Y_SIZE * 4
+
+        self.body = pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "BODY_skeleton.png")).convert_alpha(),(walk_x, walk_y))
+        
+        self.heads = [pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "HEAD_robe_hood.png")).convert_alpha(),(walk_x, walk_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "HEAD_plate_armor_helmet.png")).convert_alpha(),(walk_x, walk_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "HEAD_chain_armor_helmet.png")).convert_alpha(),(walk_x, walk_y))]
+        
+        self.belt = [pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "BELT_rope.png")).convert_alpha(),(walk_x, walk_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "BELT_leather.png")).convert_alpha(),(walk_x, walk_y))]
+                
+        self.torso = [pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "TORSO_robe_shirt_brown.png")).convert_alpha(),(walk_x, walk_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "TORSO_plate_armor_torso.png")).convert_alpha(),(walk_x, walk_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "TORSO_chain_armor_torso.png")).convert_alpha(),(walk_x, walk_y))]
+        
+        self.legs = [pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "LEGS_robe_skirt.png")).convert_alpha(),(walk_x, walk_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "LEGS_plate_armor_pants.png")).convert_alpha(),(walk_x, walk_y))]
+
+        self.feet = pygame.transform.smoothscale(pygame.image.load(os.path.join(walk_path, "FEET_plate_armor_shoes.png")).convert_alpha(),(walk_x, walk_y))
+
+        
+        self.s_body = pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "BODY_skeleton.png")).convert_alpha(),(slash_x, slash_y))
+        
+        self.s_heads = [pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "HEAD_robe_hood.png")).convert_alpha(),(slash_x, slash_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "HEAD_plate_armor_helmet.png")).convert_alpha(),(slash_x, slash_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "HEAD_chain_armor_helmet.png")).convert_alpha(),(slash_x, slash_y))]
+        
+        self.s_belt = [pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "BELT_rope.png")).convert_alpha(),(slash_x, slash_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "BELT_leather.png")).convert_alpha(),(slash_x, slash_y))]
+                
+        self.s_torso = [pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "TORSO_robe_shirt_brown.png")).convert_alpha(),(slash_x, slash_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "TORSO_plate_armor_torso.png")).convert_alpha(),(slash_x, slash_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "TORSO_chain_armor_torso.png")).convert_alpha(),(slash_x, slash_y))]
+        
+        self.s_legs = [pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "LEGS_robe_skirt.png")).convert_alpha(),(slash_x, slash_y)),
+                        pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "LEGS_plate_armor_pants.png")).convert_alpha(),(slash_x, slash_y))]
+
+        self.s_feet = pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "FEET_plate_armor_shoes.png")).convert_alpha(),(slash_x, slash_y))
+
+        self.s_weapon = [pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "WEAPON_dagger.png")).convert_alpha(),(slash_x, slash_y))]
+                        # pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "WEAPON_longsword.png")).convert_alpha(),(slash_x, slash_y)),
+                        # pygame.transform.smoothscale(pygame.image.load(os.path.join(slash_path, "WEAPON_rapier.png")).convert_alpha(),(slash_x, slash_y))]
+
 
     def get_random_enemy_images(self):
-        images = []
-        
+
+        walk = []
+        slash = []
+        #random.randint(0,2)
         armor = random.randint(0,3)
         if armor == 0:
-            images = [self.body, self.heads[0], self.belt[0], self.torso[0], self.legs[0]]
+            walk = [self.body, self.heads[0], self.belt[0], self.torso[0], self.legs[0]]
+            slash = [self.body, self.heads[0], self.belt[0], self.torso[0], self.legs[0],self.s_weapon[0]]
         elif armor == 1:
-            images = [self.body, self.heads[1], self.belt[1], self.torso[1], self.legs[1], self.feet]
+            walk = [self.body, self.heads[1], self.belt[1], self.torso[1], self.legs[1], self.feet]
+            slash = [self.body, self.heads[1], self.belt[1], self.torso[1], self.legs[1], self.feet,self.s_weapon[0]]
         elif armor == 2:
-            images = [self.body, self.heads[2], self.belt[0], self.torso[2], self.legs[1]]
+            walk = [self.body, self.heads[2], self.belt[0], self.torso[2], self.legs[1]]
+            slash = [self.body, self.heads[2], self.belt[0], self.torso[2], self.legs[1],self.s_weapon[0]]
         elif armor == 3:
-            images = [self.body, self.heads[0], self.belt[0], self.torso[0], self.legs[0]]
-        
+            walk = [self.body, self.heads[0], self.belt[0], self.torso[0], self.legs[0]]
+            slash = [self.body, self.heads[0], self.belt[0], self.torso[0], self.legs[0],self.s_weapon[0]]        
 
-        return images
+        return (walk, slash)
 
 
 

@@ -7,8 +7,9 @@ Created on Wed Jan  20 10:27:00 2021
 """
 
 import pygame
-import math
 from pygame import Rect
+import math
+
 import const as c
 
 class Enemy(pygame.sprite.Sprite):
@@ -29,58 +30,60 @@ class Enemy(pygame.sprite.Sprite):
         # player model state
         self.state = 0
 
+        # counter for slash animation
+        self.slash_state = 2
+
         # player starts facing down
         self.direction = c.direction.DOWN
 
         # get screen for draw-target
         self.screen = game.screen
 
-        self.model = models.get_random_enemy_images()
+        self.model, self.slash = models.get_random_enemy_images()
+        
 
     def get_next_pos(self):
+
         # calculate next position
         new_x = self.rect[0] + self.velocity[0]
         new_y = self.rect[1] + self.velocity[1]
         return (new_x,new_y)
 
-    def update(self):
-        # calculate next position
-        self.rect.move_ip(*self.velocity) 
-
-        # walking animation
-        if self.velocity[0] == 0 and self.velocity[1] == 0:
-            self.state = 0
-        else:
-            self.state += 1
-            if self.state >= 9:
-                self.state = 1
-
-        # get direction
-        if self.velocity[1] > 0:
-            self.direction = c.direction.DOWN
-        elif self.velocity[1] < 0:
-            self.direction = c.direction.UP
-        elif self.velocity[0] > 0:
-            self.direction = c.direction.RIGHT
-        elif self.velocity[0] < 0:
-            self.direction = c.direction.LEFT
-
-        src = Rect(self.state * c.ENEMY_X_SIZE, self.direction * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
-        for sprite in self.model:
+    def hit(self, direction):
+        self.slash_state += 1
+        if self.slash_state >= c.SLASH_ANIMATION_LENGTH*c.ANIMATION_MODIFIER:
+            self.slash_state = 1        
+        
+        state = math.floor(self.slash_state/c.ANIMATION_MODIFIER)
+        src = Rect(state * c.ENEMY_X_SIZE, direction * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
+        for sprite in self.slash:
             self.screen.blit(sprite, self.rect, src) 
 
-    def update_to(self,x,y):
-        # calculate next position
-        self.rect[0] = x
-        self.rect[1] = y 
 
-        # walking animation
-        if self.velocity[0] == 0 and self.velocity[1] == 0:
-            self.state = 0
+    def update(self, x=None, y=None):
+
+        # calculate next position
+        if x is None or y is None:    
+            self.rect.move_ip(*self.velocity) 
         else:
-            self.state += 1
-            if self.state >= 9:
-                self.state = 1
+            self.rect[0] = x
+            self.rect[1] = y 
+
+        self.draw()
+
+
+    def draw(self, stop = None):
+
+        if stop is None:
+            # walking animation
+            if self.velocity[0] == 0 and self.velocity[1] == 0:
+                self.state = 0
+            else:
+                self.state += 1
+                if self.state >= c.WALK_ANIMATION_LENGTH:
+                    self.state = 1
+        else:
+            self.state = 0
 
         # get direction
         if self.velocity[1] > 0:
@@ -92,7 +95,6 @@ class Enemy(pygame.sprite.Sprite):
         elif self.velocity[0] < 0:
             self.direction = c.direction.LEFT
 
-        # draw player on map
         src = Rect(self.state * c.ENEMY_X_SIZE, self.direction * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
         for sprite in self.model:
-            self.screen.blit(sprite, self.rect, src)        
+            self.screen.blit(sprite, self.rect, src)  

@@ -17,7 +17,7 @@ class Main():
         print("Initializing pygame: {0} successes and {1} failures.".format(successes, failures))
 
         # load and set logo; set window title
-        logo = pygame.image.load(os.path.join("images", "logo.png"))
+        logo = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "logo.png")),(16,16))
         pygame.display.set_icon(logo)
         pygame.display.set_caption('Mazewalker')
 
@@ -25,12 +25,17 @@ class Main():
         self.screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT))
         self.clock = pygame.time.Clock()
 
+
+
         self.game = game.Game(self.screen, self.clock)
 
         self.run_game()
 
     def run_game(self):
         self.game.run_game(20,20)
+
+    def display_menu():
+        pass
 
 if __name__=="__main__":
     new_Main = Main()

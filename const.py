@@ -24,6 +24,20 @@ ENEMY_SPEED = 100
 FPS = 60
 WINDOW_HEIGHT = 1312
 WINDOW_WIDTH = 1312
+PAUSE_X_SIZE = 556
+PAUSE_Y_SIZE = 156
+WALK_ANIMATION_LENGTH = 9
+SLASH_ANIMATION_LENGTH = 6
+HURT_ANIMATION_LENGTH = 6
+ANIMATION_MODIFIER = 10
+
+# enum for game state:
+class game_state(enum.IntEnum):
+    EXIT = 0
+    RUNNING = 1
+    DEATH = 2
+    WIN = 3
+    PAUSE = 4
 
 # emum for direction of models
 class direction(enum.IntEnum):
