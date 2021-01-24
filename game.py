@@ -344,14 +344,17 @@ class Game():
         self.enemies.remove(self.foe)
         direction = c.direction.DOWN
         # get direction foe has to face
-        if self.player.rect[1] > self.foe.rect[1]:
-            direction = c.direction.DOWN
-        elif self.player.rect[1] < self.foe.rect[1]: 
-            direction = c.direction.UP
-        elif self.player.rect[0] > self.foe.rect[0]:
-            direction = c.direction.RIGHT
-        elif self.player.rect[0] < self.foe.rect[0]: 
-            direction = c.direction.LEFT
+
+        if abs(self.player.rect[1] - self.foe.rect[1]) > abs(self.player.rect[0] - self.foe.rect[0]):
+            if self.player.rect[1] > self.foe.rect[1]:
+                direction = c.direction.DOWN
+            elif self.player.rect[1] < self.foe.rect[1]: 
+                direction = c.direction.UP
+        else:
+            if self.player.rect[0] > self.foe.rect[0]:
+                direction = c.direction.RIGHT
+            elif self.player.rect[0] < self.foe.rect[0]: 
+                direction = c.direction.LEFT
         
         # play animation twice
         for x in range(0,c.SLASH_ANIMATION_LENGTH*2*c.ANIMATION_MODIFIER):
