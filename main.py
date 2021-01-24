@@ -13,6 +13,7 @@ import game
 
 class Main():
     def __init__(self):
+        
         successes, failures = pygame.init()
         print("Initializing pygame: {0} successes and {1} failures.".format(successes, failures))
 
@@ -25,17 +26,27 @@ class Main():
         self.screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT))
         self.clock = pygame.time.Clock()
 
-
-
         self.game = game.Game(self.screen, self.clock)
 
-        self.run_game()
+        self.display_menu()
 
-    def run_game(self):
-        self.game.run_game(20,20)
+    def display_menu(self):
+        
+        show_menu = True
+        while show_menu:
+            self.screen.fill(c.BLACK)
 
-    def display_menu():
-        pass
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            show_menu = False
+                        elif event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_ESCAPE:
+                                show_menu = False
+                            if event.key == pygame.K_RETURN:
+                                self.game.run_game(20,20)
+            
 
 if __name__=="__main__":
     new_Main = Main()

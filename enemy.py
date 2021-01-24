@@ -51,10 +51,10 @@ class Enemy(pygame.sprite.Sprite):
 
     def hit(self, direction):
         self.slash_state += 1
-        if self.slash_state >= c.SLASH_ANIMATION_LENGTH*c.ANIMATION_MODIFIER:
+        if self.slash_state >= c.SLASH_ANIMATION_LENGTH*c.SLASH_ANIMATION_MODIFIER:
             self.slash_state = 1        
         
-        state = math.floor(self.slash_state/c.ANIMATION_MODIFIER)
+        state = math.floor(self.slash_state/c.SLASH_ANIMATION_MODIFIER)
         src = Rect(state * c.ENEMY_X_SIZE, direction * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
         for sprite in self.slash:
             self.screen.blit(sprite, self.rect, src) 
@@ -80,10 +80,12 @@ class Enemy(pygame.sprite.Sprite):
                 self.state = 0
             else:
                 self.state += 1
-                if self.state >= c.WALK_ANIMATION_LENGTH:
+                if self.state >= c.WALK_ANIMATION_LENGTH*c.ENEMY_WALK_ANIMATION_MODIFIER:
                     self.state = 1
         else:
             self.state = 0
+
+        state = math.floor(self.state/c.ENEMY_WALK_ANIMATION_MODIFIER)
 
         # get direction
         if self.velocity[1] > 0:
@@ -95,6 +97,6 @@ class Enemy(pygame.sprite.Sprite):
         elif self.velocity[0] < 0:
             self.direction = c.direction.LEFT
 
-        src = Rect(self.state * c.ENEMY_X_SIZE, self.direction * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
+        src = Rect(state * c.ENEMY_X_SIZE, self.direction * c.ENEMY_Y_SIZE, c.ENEMY_X_SIZE, c.ENEMY_Y_SIZE )
         for sprite in self.model:
             self.screen.blit(sprite, self.rect, src)  

@@ -357,7 +357,7 @@ class Game():
                 direction = c.direction.LEFT
         
         # play animation twice
-        for x in range(0,c.SLASH_ANIMATION_LENGTH*2*c.ANIMATION_MODIFIER):
+        for x in range(0,c.SLASH_ANIMATION_LENGTH*2*c.SLASH_ANIMATION_MODIFIER):
 
             # draw map and player death
             self.map.draw()
@@ -389,8 +389,8 @@ class Game():
 
         # set starting coordinates for player
         s_p_0, s_p_1 = self.starting_p
-        self.player.rect[0] += s_p_0*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_X_SIZE)/2)
-        self.player.rect[1] += s_p_1*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_Y_SIZE)/2)
+        self.player.rect[0] = s_p_0*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_X_SIZE)/2)
+        self.player.rect[1] = s_p_1*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_Y_SIZE)/2)
 
         # variable for state of mouse button
         # self.mouse_cap = False

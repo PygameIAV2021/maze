@@ -93,10 +93,10 @@ class Player(pygame.sprite.Sprite):
     def hurt(self):
 
         self.hurt_state += 1
-        if self.hurt_state >= c.HURT_ANIMATION_LENGTH*c.ANIMATION_MODIFIER:
-            self.hurt_state = (c.HURT_ANIMATION_LENGTH*c.ANIMATION_MODIFIER)-1
+        if self.hurt_state >= c.HURT_ANIMATION_LENGTH*c.HURT_ANIMATION_MODIFIER:
+            self.hurt_state = (c.HURT_ANIMATION_LENGTH*c.HURT_ANIMATION_MODIFIER)-1
 
-        state = math.floor(self.hurt_state/c.ANIMATION_MODIFIER)   
+        state = math.floor(self.hurt_state/c.HURT_ANIMATION_MODIFIER)   
 
         # draw player on map
         src = Rect(state * c.PLAYER_X_SIZE, 0, c.PLAYER_X_SIZE, c.PLAYER_Y_SIZE )
@@ -110,8 +110,10 @@ class Player(pygame.sprite.Sprite):
             self.state = 0
         else:
             self.state += 1
-            if self.state >= c.WALK_ANIMATION_LENGTH:
+            if self.state >= c.WALK_ANIMATION_LENGTH*c.PLAYER_WALK_ANIMATION_MODIFIER:
                 self.state = 1   
+
+        state = math.floor(self.state/c.PLAYER_WALK_ANIMATION_MODIFIER) 
 
         # get direction
         if self.velocity[1] > 0:
@@ -124,7 +126,7 @@ class Player(pygame.sprite.Sprite):
             self.direction = c.direction.LEFT
 
         # draw player on map
-        src = Rect(self.state * c.PLAYER_X_SIZE, self.direction * c.PLAYER_Y_SIZE, c.PLAYER_X_SIZE, c.PLAYER_Y_SIZE )
+        src = Rect(state * c.PLAYER_X_SIZE, self.direction * c.PLAYER_Y_SIZE, c.PLAYER_X_SIZE, c.PLAYER_Y_SIZE )
         for sprite in self.model:
             self.screen.blit(sprite, self.rect, src)            
 
