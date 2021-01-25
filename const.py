@@ -10,26 +10,26 @@ import enum
 from pygame import Rect
 
 # File including most of the static values
-TILE_SIZE = 32
+TILE_SIZE = 64
 ENEMY_SIZE = TILE_SIZE
 PLAYER_SIZE = TILE_SIZE
 COLLISION_OFFSET = (10,2,8,4) # Top, Bottom, Left, Right
 PLAYER_SPEED = 4 # Tiles per second
-ENEMY_SPEED = 2 # Tiles per second
+ENEMY_SPEED = 3 # Tiles per second
 ENEMY_RAND_SPEED = 1 # Tiles per second
 ENEMY_COUNT = 6
 FPS = 60
-WINDOW_SIZE = (1632,992) # (Width, Height)
-MAZE_SIZE = (25,15) # (Width, Height)
+WINDOW_SIZE = (1456,1296) # (Width, Height)
+MAZE_SIZE = (45,40) # (Width, Height)
 WALK_ANIMATION_LENGTH = 9
 SLASH_ANIMATION_LENGTH = 6
 HURT_ANIMATION_LENGTH = 6
 SLASH_ANIMATION_MODIFIER = 10
 HURT_ANIMATION_MODIFIER = 10
-PLAYER_WALK_ANIMATION_MODIFIER = 7
+PLAYER_WALK_ANIMATION_MODIFIER = 5
 ENEMY_WALK_ANIMATION_MODIFIER = 5
 
-# The following enumerations may not be changed
+# The following entries may not be changed
 
 # enum for game state:
 class game_state(enum.IntEnum):

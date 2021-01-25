@@ -71,8 +71,8 @@ class Map():
 
     def update_tracker(self, rect):
 
-        x = math.floor((rect[0] + (c.PLAYER_X_SIZE / 2)) / c.TILE_SIZE)
-        y = math.floor((rect[1] + (c.PLAYER_Y_SIZE / 2))/ c.TILE_SIZE) 
+        x = math.floor((rect[0] + (c.PLAYER_SIZE / 2)) / c.TILE_SIZE)
+        y = math.floor((rect[1] + (c.PLAYER_SIZE / 2))/ c.TILE_SIZE) 
         if self.tracker[x][y] == 0:
             self.tracker[x][y] = 1
 
