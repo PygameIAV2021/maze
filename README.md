@@ -47,7 +47,6 @@ Dort befinden sich am Anfang einer Datei Konstanten, die die folgenden Parameter
 - TILE_SIZE: Größe eines Feldes in Pixeln
 - ENEMY_SIZE = Größe eines Gegners in Pixeln (<= TILE_SIZE>)
 - PLAYER_SIZE = Größe des Spielers in Pixeln (<= TILE_SIZE>)
-- COLLISION_OFFSET = Überlappung des Spielers mit Kanten (Oben, Unten, Links, Rechts)
 - PLAYER_SPEED = Geschwindigkeit des Spielers in Feldern pro Sekunde
 - ENEMY_SPEED = Basisgeschwindigkeit der Gegner in Feldern pro Sekunde
 - ENEMY_RAND_SPEED = Zufällige Zusatzgeschwindigkeit der Gegner in Feldern pro Sekunde

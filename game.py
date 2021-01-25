@@ -195,7 +195,11 @@ class Game():
         tmp_rect = Rect(new_x,new_y,c.PLAYER_SIZE,c.PLAYER_SIZE)
 
         # calculate the postition of the player in the map array and add the offset for smaller collision rectangle
-        off_top, off_bot, off_left, off_right = c.COLLISION_OFFSET
+        off_top = math.ceil(c.PLAYER_SIZE/3)
+        off_bot = math.ceil(c.PLAYER_SIZE/16)
+        off_left = math.ceil(c.PLAYER_SIZE/4)
+        off_right = math.ceil(c.PLAYER_SIZE/8)
+
         x_1 = math.floor((tmp_rect[0] + off_left) / c.TILE_SIZE)
         y_1 = math.floor((tmp_rect[1] + off_top) / c.TILE_SIZE) 
         x_2 = math.floor((tmp_rect[0] + c.PLAYER_SIZE  - (2 * off_right)) / c.TILE_SIZE)

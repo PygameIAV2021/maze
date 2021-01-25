@@ -9,10 +9,9 @@ Created on Thu Dec  3 08:27:00 2020
 import enum
 
 # File including most of the static values
-TILE_SIZE = 64
+TILE_SIZE = 32
 ENEMY_SIZE = TILE_SIZE
 PLAYER_SIZE = TILE_SIZE
-COLLISION_OFFSET = (10,2,8,4) # Top, Bottom, Left, Right
 PLAYER_SPEED = 4 # Tiles per second
 ENEMY_SPEED = 3 # Tiles per second
 ENEMY_RAND_SPEED = 1 # Tiles per second
