@@ -20,6 +20,7 @@ COLLISION_OFFSET = (10,2,8,4) # Top, Bottom, Left, Right
 PLAYER_SPEED = 4 # Tiles per second
 ENEMY_SPEED = 2 # Tiles per second
 ENEMY_RAND_SPEED = 1 # Tiles per second
+ENEMY_COUNT = 6
 FPS = 60
 WINDOW_SIZE = (1312,1312)
 PAUSE_SIZE = (556,156)

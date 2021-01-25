@@ -9,7 +9,7 @@ Created on Thu Dec  3 08:27:00 2020
 import math 
 import random
 
-from const import field_v, return_v, draw_v
+from const import field_v, return_v, draw_v, ENEMY_COUNT
 
 # Class for generating the array containing the map and all important spots on the map
 
@@ -178,7 +178,7 @@ class Generator():
 
         self.enemy_spawns = []
 
-        for n in range(0,6):
+        for n in range(0,ENEMY_COUNT):
             if len(list_of_spawns) > 0:
                 self.enemy_spawns += [list_of_spawns.pop()]
         
