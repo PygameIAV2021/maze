@@ -16,18 +16,21 @@ PLAYER_SPEED = 4 # Tiles per second
 ENEMY_SPEED = 3 # Tiles per second
 ENEMY_RAND_SPEED = 1 # Tiles per second
 ENEMY_COUNT = 6
-FPS = 60
 WINDOW_SIZE = (1456,1296) # (Width, Height)
 MAZE_SIZE = (45,40) # (Width, Height)
+
+# The following entries may not be changed
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 WALK_ANIMATION_LENGTH = 9
 SLASH_ANIMATION_LENGTH = 6
 HURT_ANIMATION_LENGTH = 6
+FPS = 60
 SLASH_ANIMATION_MODIFIER = 10
 HURT_ANIMATION_MODIFIER = 10
 PLAYER_WALK_ANIMATION_MODIFIER = 5
 ENEMY_WALK_ANIMATION_MODIFIER = 5
-
-# The following entries may not be changed
 
 # enum for game state:
 class game_state(enum.IntEnum):
@@ -110,6 +113,3 @@ class return_v(enum.IntEnum):
     OCCUPIED = 1
     OUTOFBOUND = 2
     INVALID = 99
-
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)

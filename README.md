@@ -51,15 +51,7 @@ Dort befinden sich am Anfang einer Datei Konstanten, die die folgenden Parameter
 - ENEMY_SPEED = Basisgeschwindigkeit der Gegner in Feldern pro Sekunde
 - ENEMY_RAND_SPEED = Zufällige Zusatzgeschwindigkeit der Gegner in Feldern pro Sekunde
 - ENEMY_COUNT = Maximale Anzahl der Gegner
-- FPS = Anzahl der Bilder pro Sekunde
 - WINDOW_SIZE = Größe des Fensters (Breite, Höhe)
-- WALK_ANIMATION_LENGTH = Länge der Laufanimation
-- SLASH_ANIMATION_LENGTH = Länge der Schalganimation
-- HURT_ANIMATION_LENGTH = Länge der Spielertod
-- SLASH_ANIMATION_MODIFIER = Multiplikator für Schlaganimation
-- HURT_ANIMATION_MODIFIER = Multiplikator für Spielertod
-- PLAYER_WALK_ANIMATION_MODIFIER = Multiplikator für Spielerlaufanimation
-- ENEMY_WALK_ANIMATION_MODIFIER = Multiplikator für Gegnerlaufanimation
 - MAZE_SIZE = Größe des Labyrinths in Felder (Finale Größe ist 2*MAZE_SIZE+1 !!!)
 
 ## Interner Aufbau
