@@ -3,7 +3,7 @@ Mazewalker
 
 ## Das Spiel
 
-Das Spielprinzip ist relativ simpel gehalten. Man muss seine Figur zum Ziel (die kleine silber/goldene Falltür) steuern und muss dabei den in dem Labyrinth herumirrenden Skeletten ausweichen. Es ist möglich das Spiel jederzeit zu pausieren oder sich die bereits besuchten Felder anzeigen zu lassen.
+Das Spielprinzip ist relativ simpel gehalten. Man muss seine Figur zum Ziel (die kleine silber/goldene Falltür) steuern und muss dabei den in dem Labyrinth herumirrenden Skeletten ausweichen. Es ist möglich das Spiel jederzeit zu pausieren oder sich die bereits besuchten Felder anzeigen zu lassen. Der Spieler beginnt immer links oben (Quadrant II.) und das Ziel befindet sich in der rechten unteren Ecke (Quadrant IV.). Die Gegener beginnen auf zufälligen Feldern in allen Quadranten (I., III., IV.) außer dem linken oberen Quadranten (II.), in dem der Spieler beginnt.
 
 ## Steuerung
 
