@@ -61,6 +61,7 @@ Dort befinden sich am Anfang einer Datei Konstanten, die die folgenden Parameter
 - HURT_ANIMATION_MODIFIER = Multiplikator für Spielertod
 - PLAYER_WALK_ANIMATION_MODIFIER = Multiplikator für Spielerlaufanimation
 - ENEMY_WALK_ANIMATION_MODIFIER = Multiplikator für Gegnerlaufanimation
+- MAZE_SIZE = Größe des Labyrinths in Felder (Finale Größe ist 2*MAZE_SIZE+1 !!!)
 
 ## Interner Aufbau
 

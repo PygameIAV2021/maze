@@ -167,6 +167,8 @@ class Generator():
         
     def set_spawns(self):
 
+        # choose random spawn in every quarter of the map except the quarter where the player begins
+
         list_of_spawns = []      
         for x in range(0,self.finalxSize):
             for y in range(0,self.finalySize):

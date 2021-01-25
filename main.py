@@ -79,7 +79,8 @@ class Main():
                             if event.key == pygame.K_ESCAPE:
                                 show_menu = False
                             if event.key == pygame.K_RETURN:
-                                self.state = self.game.run_game(10,10)
+                                maze_x, maze_y = c.MAZE_SIZE
+                                self.state = self.game.run_game(maze_x,maze_y)
             
 
 if __name__=="__main__":
