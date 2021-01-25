@@ -11,6 +11,7 @@ import random
 
 from const import field_v, return_v, draw_v
 
+# Class for generating the array containing the map and all important spots on the map
 
 class Generator():
     def __init__(self):

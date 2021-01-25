@@ -17,8 +17,10 @@ import player
 import enemy
 import models
 
-# main file and switches between menu and maze
-# Display and render maze and player; react to input; return value if won or lost
+# This class displays and renders maze and player; react to input; return value if won or lost
+# Checks for Collisions between player <-> walls, player <-> enemies, enemies <-> walls
+# Provide all game functions like pause, winning, loosing, moving of the NPCs etc.
+
 
 class Game():
     def __init__(self,screen, clock):
@@ -28,7 +30,8 @@ class Game():
         self.clock = clock
 
         # load pause screen
-        self.pause_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Pause.png")).convert_alpha(),(c.PAUSE_X_SIZE, c.PAUSE_Y_SIZE))
+        pause_w, pause_h = c.PAUSE_SIZE
+        self.pause_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Pause.png")).convert_alpha(),(pause_w, pause_h))
 
         # load classes for the map and the player
         self.map = map.Map(self)   
@@ -99,8 +102,8 @@ class Game():
                         self.player.velocity[0] = self.player.velocity[0] * 2
                     if self.player.velocity[1] != 0:
                         self.player.velocity[1] = self.player.velocity[1] * 2
-                # elif event.key == pygame.K_z: 
-                #     self.map.scrolling = not self.map.scrolling
+                elif event.key == pygame.K_z: 
+                    self.scrolling = not self.scrolling
             elif event.type == pygame.KEYUP:
                 # reset player velocity after key release
                 if event.key == pygame.K_w or event.key == pygame.K_s:
@@ -114,27 +117,28 @@ class Game():
                         self.player.velocity[0] = self.player.velocity[0] / 2
                     if self.player.velocity[1] != 0:
                         self.player.velocity[1] = self.player.velocity[1] / 2 
-            # elif event.type == pygame.MOUSEMOTION:
-            #     if self.mouse_cap: self.map.scroll(event.rel)
-            # elif event.type == pygame.MOUSEBUTTONDOWN:
-            #     self.mouse_cap = True
-            #     print("m_c:" + str(mouse_cap))
-            # elif event.type == pygame.MOUSEBUTTONUP:
-            #     self.mouse_cap = False
-            #     print("m_c:" + str(mouse_cap))
+            elif event.type == pygame.MOUSEMOTION:
+                if self.mouse_cap: self.scroll(event.rel)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.mouse_cap = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.mouse_cap = False
 
+    def scroll(self, rel):
+
+        if not self.scrolling: return
+
+        self.offset = (
+            self.offset[0] + rel[0],
+            self.offset[1] + rel[1] )
 
     def check_target_completion(self):
         
-        tmp_rect = Rect(self.player.rect[0],self.player.rect[1],c.PLAYER_X_SIZE,c.PLAYER_Y_SIZE)
-        # if map is offset add offset to player model
-        if self.map.scrolling:
-            tmp_rect[0] += self.map.offset[0]
-            tmp_rect[1] += self.map.offset[1]
+        tmp_rect = Rect(self.player.rect[0],self.player.rect[1],c.PLAYER_SIZE,c.PLAYER_SIZE)
 
         # calculate the postition of the player in the map array
-        x = math.floor((tmp_rect[0] + (c.PLAYER_X_SIZE / 2)) / c.TILE_SIZE)
-        y = math.floor((tmp_rect[1] + (c.PLAYER_Y_SIZE / 2)) / c.TILE_SIZE) 
+        x = math.floor((tmp_rect[0] + (c.PLAYER_SIZE / 2)) / c.TILE_SIZE)
+        y = math.floor((tmp_rect[1] + (c.PLAYER_SIZE / 2)) / c.TILE_SIZE) 
 
         ending_x, ending_y = self.ending_p
 
@@ -144,17 +148,14 @@ class Game():
 
     def check_collision(self, new_x, new_y):
 
-        tmp_rect = Rect(new_x,new_y,c.PLAYER_X_SIZE,c.PLAYER_Y_SIZE)
-        # if map is offset add offset to player model
-        if self.map.scrolling:
-            tmp_rect[0] += self.map.offset[0]
-            tmp_rect[1] += self.map.offset[1]
+        tmp_rect = Rect(new_x,new_y,c.PLAYER_SIZE,c.PLAYER_SIZE)
 
         # calculate the postition of the player in the map array and add the offset for smaller collision rectangle
-        x_1 = math.floor((tmp_rect[0] + c.COLLISION_OFFSET_LEFT) / c.TILE_SIZE)
-        y_1 = math.floor((tmp_rect[1] + c.COLLISION_OFFSET_TOP) / c.TILE_SIZE) 
-        x_2 = math.floor((tmp_rect[0] + c.PLAYER_X_SIZE  - (2 * c.COLLISION_OFFSET_RIGHT)) / c.TILE_SIZE)
-        y_2 = math.floor((tmp_rect[1] + c.PLAYER_Y_SIZE  - (2 * c.COLLISION_OFFSET_BOTTOM)) / c.TILE_SIZE)
+        off_top, off_bot, off_left, off_right = c.COLLISION_OFFSET
+        x_1 = math.floor((tmp_rect[0] + off_left) / c.TILE_SIZE)
+        y_1 = math.floor((tmp_rect[1] + off_top) / c.TILE_SIZE) 
+        x_2 = math.floor((tmp_rect[0] + c.PLAYER_SIZE  - (2 * off_right)) / c.TILE_SIZE)
+        y_2 = math.floor((tmp_rect[1] + c.PLAYER_SIZE  - (2 * off_bot)) / c.TILE_SIZE)
 
         # add for collisions
         collision = 0
@@ -209,7 +210,7 @@ class Game():
     def update_player(self):
 
             # get position for player after next movement
-            next_x, next_y= self.player.get_next_pos()
+            next_x, next_y= self.player.get_next_pos()           
 
             x_velo = self.player.velocity[0]
             y_velo = self.player.velocity[1]
@@ -280,7 +281,7 @@ class Game():
         # set the next target and the corresponding movement speed
         if new_direction == c.direction.UP:
             enemy.velocity[0] = 0
-            enemy.velocity[1] = -enemy.speed * self.dt
+            enemy.velocity[1] = - (enemy.speed * self.dt * 0.5)
             enemy.target[1] -= c.TILE_SIZE
 
         elif new_direction == c.direction.DOWN:
@@ -289,7 +290,7 @@ class Game():
             enemy.target[1] += c.TILE_SIZE
 
         elif new_direction == c.direction.LEFT:
-            enemy.velocity[0] = -enemy.speed * self.dt
+            enemy.velocity[0] = - (enemy.speed * self.dt * 0.5)
             enemy.velocity[1] = 0
             enemy.target[0] -= c.TILE_SIZE
 
@@ -308,28 +309,28 @@ class Game():
             # if the target is not reached move the enemy with his speed and update him
             # if the target is reached get the next target position
             next_x, next_y= enemy.get_next_pos()
-
+            
             if enemy.velocity[0] > 0: # DOWN
                 if next_x < enemy.target[0]:
-                    enemy.update()
+                    enemy.update(next_x,next_y)
                 else:
                     self.set_next_target(enemy, c.direction.RIGHT)
             
             elif enemy.velocity[0] < 0: # UP
                 if next_x > enemy.target[0]:
-                    enemy.update()
+                    enemy.update(next_x,next_y)
                 else:
                     self.set_next_target(enemy, c.direction.LEFT)
             
             elif enemy.velocity[1] > 0: # RIGHT
                 if next_y < enemy.target[1]:
-                    enemy.update()
+                    enemy.update(next_x,next_y)
                 else:
                     self.set_next_target(enemy, c.direction.DOWN)
             
             elif enemy.velocity[1] < 0: # LEFT
                 if next_y > enemy.target[1]:
-                    enemy.update()
+                    enemy.update(next_x,next_y)
                 else:
                     self.set_next_target(enemy, c.direction.UP)
             
@@ -389,11 +390,17 @@ class Game():
 
         # set starting coordinates for player
         s_p_0, s_p_1 = self.starting_p
-        self.player.rect[0] = s_p_0*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_X_SIZE)/2)
-        self.player.rect[1] = s_p_1*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_Y_SIZE)/2)
+        self.player.rect[0] = s_p_0*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_SIZE)/2)
+        self.player.rect[1] = s_p_1*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_SIZE)/2)
 
         # variable for state of mouse button
-        # self.mouse_cap = False
+        self.mouse_cap = False
+
+        # variable for scrolling
+        self.scrolling = True
+
+        # current scrolling offset
+        self.offset = (0, 0)
 
         # Game ending enemy
         self.foe = None

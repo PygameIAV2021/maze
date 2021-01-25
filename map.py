@@ -15,33 +15,22 @@ import generator
 import const as c
 
 
+# Class for drawing of the map and wrapping the map generator 
+
 class Map():
     def __init__(self, game):
 
         self.game = game
         self.screen = game.screen
-        
-        self.scrolling = False
-        
-        self.basetiles = pygame.image.load(os.path.join("images", "base.png")).convert_alpha()
+                
+        self.basetiles = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "base.png")).convert_alpha(),(c.TILE_SIZE*3,c.TILE_SIZE*3))
         self.rect = self.basetiles.get_rect()
-        self.bordertiles = pygame.image.load(os.path.join("images", "borders.png")).convert_alpha()
-        self.markertiles = pygame.image.load(os.path.join("images", "markers.png")).convert_alpha()
+        self.bordertiles = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "borders.png")).convert_alpha(),(c.TILE_SIZE*16,c.TILE_SIZE))
+        self.markertiles = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "markers.png")).convert_alpha(),(c.TILE_SIZE,c.TILE_SIZE))
 
         self.generator = generator.Generator()
 
-        self.offset = (0, 0)
-        
-                
-    def scroll(self, rel):
 
-        if not self.scrolling: return
-
-        self.offset = (
-            self.offset[0] + rel[0],
-            self.offset[1] + rel[1] )
-        
-                    
     def load_map(self, size_x, size_y):
 
         # Generate new map and get the mapsize in tiles
@@ -114,9 +103,9 @@ class Map():
                         border = Rect( c.draw_v.RS_0 * c.TILE_SIZE, 0, c.TILE_SIZE, c.TILE_SIZE ) 
 
                     # note, for scrolling tiles, uncomment:
-                    if self.scrolling:
-                        dest.left += self.offset[0]
-                        dest.top += self.offset[1]                        
+                    if self.game.scrolling:
+                        dest.left += self.game.offset[0]
+                        dest.top += self.game.offset[1]                        
 
                     self.screen.blit( self.basetiles, dest, base)
                     self.screen.blit( self.bordertiles, dest, border)

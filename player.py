@@ -13,18 +13,20 @@ import os
 
 import const as c
 
+# Class for displaying and moving of the player sprite
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, game):
         super().__init__()
 
         # load image for player character model
         self.load_images()        
-        self.image = pygame.Surface((c.PLAYER_X_SIZE, c.PLAYER_Y_SIZE))
+        self.image = pygame.Surface((c.PLAYER_SIZE, c.PLAYER_SIZE))
         self.rect = self.image.get_rect()
         self.velocity = [0, 0]
 
         # set player in pixel per second
-        self.speed = c.PLAYER_SPEED
+        self.speed = math.ceil(c.PLAYER_SPEED * c.TILE_SIZE)
 
         # player model state
         self.state = 0
@@ -37,6 +39,7 @@ class Player(pygame.sprite.Sprite):
 
         # get screen for draw-target
         self.screen = game.screen
+        self.game = game
         
 
     def load_images(self):
@@ -58,7 +61,7 @@ class Player(pygame.sprite.Sprite):
 
         self.model = []
         for sprite in images:
-            self.model += [pygame.transform.smoothscale(sprite, (c.PLAYER_X_SIZE * c.WALK_ANIMATION_LENGTH, c.PLAYER_Y_SIZE * 4))]
+            self.model += [pygame.transform.smoothscale(sprite, (c.PLAYER_SIZE * c.WALK_ANIMATION_LENGTH, c.PLAYER_SIZE * 4))]
 
         images = [pygame.image.load(os.path.join(hurt_path, "BODY_male.png")).convert_alpha(),
                         pygame.image.load(os.path.join(hurt_path, "HEAD_hair_blonde.png")).convert_alpha(),
@@ -73,7 +76,7 @@ class Player(pygame.sprite.Sprite):
 
         self.hurt_model = []
         for sprite in images:
-            self.hurt_model += [pygame.transform.smoothscale(sprite, (c.PLAYER_X_SIZE * c.HURT_ANIMATION_LENGTH, c.PLAYER_Y_SIZE))]          
+            self.hurt_model += [pygame.transform.smoothscale(sprite, (c.PLAYER_SIZE * c.HURT_ANIMATION_LENGTH, c.PLAYER_SIZE))]          
 
     def get_next_pos(self):
 
@@ -98,10 +101,17 @@ class Player(pygame.sprite.Sprite):
 
         state = math.floor(self.hurt_state/c.HURT_ANIMATION_MODIFIER)   
 
+        dest = Rect(self.rect.left,self.rect.top,self.rect.width,self.rect.height)
+
+        # note, for scrolling tiles, uncomment:
+        if self.game.scrolling:
+            dest.left += self.game.offset[0]
+            dest.top += self.game.offset[1] 
+
         # draw player on map
-        src = Rect(state * c.PLAYER_X_SIZE, 0, c.PLAYER_X_SIZE, c.PLAYER_Y_SIZE )
+        src = Rect(state * c.PLAYER_SIZE, 0, c.PLAYER_SIZE, c.PLAYER_SIZE )
         for sprite in self.hurt_model:
-            self.screen.blit(sprite, self.rect, src) 
+            self.screen.blit(sprite, dest, src) 
     
     def draw(self):
 
@@ -125,9 +135,16 @@ class Player(pygame.sprite.Sprite):
         elif self.velocity[0] < 0:
             self.direction = c.direction.LEFT
 
+        dest = Rect(self.rect.left,self.rect.top,self.rect.width,self.rect.height)
+
+        # note, for scrolling tiles, uncomment:
+        if self.game.scrolling:
+            dest.left += self.game.offset[0]
+            dest.top += self.game.offset[1]         
+
         # draw player on map
-        src = Rect(state * c.PLAYER_X_SIZE, self.direction * c.PLAYER_Y_SIZE, c.PLAYER_X_SIZE, c.PLAYER_Y_SIZE )
+        src = Rect(state * c.PLAYER_SIZE, self.direction * c.PLAYER_SIZE, c.PLAYER_SIZE, c.PLAYER_SIZE )
         for sprite in self.model:
-            self.screen.blit(sprite, self.rect, src)            
+            self.screen.blit(sprite, dest, src)            
 
             
