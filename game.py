@@ -8,6 +8,7 @@ Created on Thu Dec  3 08:27:00 2020
 import pygame
 from pygame import Rect
 import os
+import sys
 import math
 import random
 
@@ -63,9 +64,13 @@ class Game():
             # check if game should exit or pause is ended
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.game_state = c.game_state.EXIT
+                # exit game directly to desktop   
+                    pygame.display.quit()
+                    pygame.quit()
+                    sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        # end game loop and go back to menu
                         self.game_state = c.game_state.EXIT
                     elif event.key == pygame.K_p:
                         self.game_state = old_state 
@@ -75,9 +80,13 @@ class Game():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.game_state = c.game_state.EXIT
+            # exit game directly to desktop   
+                pygame.display.quit()
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                # end game loop and go back to menu
                     self.game_state = c.game_state.EXIT
                 # toggle show markers
                 elif event.key == pygame.K_m:
