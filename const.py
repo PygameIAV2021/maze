@@ -10,7 +10,7 @@ import enum
 from pygame import Rect
 
 # File including most of the static values
-TILE_SIZE = 32
+TILE_SIZE = 64
 ENEMY_SIZE = TILE_SIZE
 PLAYER_SIZE = TILE_SIZE
 COLLISION_OFFSET = (10,2,8,4) # Top, Bottom, Left, Right

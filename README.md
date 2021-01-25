@@ -9,9 +9,9 @@ Das Spielprinzip ist relativ simpel gehalten. Man muss seine Figur zum Ziel (die
 
 Die Bewegung der Spielfigur erfolgt mit den Tasten W, A, S, D.  
 Das Spiel kann mit der Taste ESC verlassen und mit der Taste P pausiert werden.  
-Das Anlegen der Markierungen kann mit der Taste T an- und ausgeschaltet werden, dass Anzeiger dieser mit der Taste M.  
-Durch das Drücken der linken Maustaste kann man den dargestellten Bereich der Karte verschieben.   
-Mit der Taste R lääst sich die Verschiebung auf den Spieler zentrieren und mit der Taste Z lässt sich diese Funktion deaktivieren.  
+Das Anlegen der Markierungen kann mit der Taste T an- und ausgeschaltet werden, dass Anzeiger dieser mit der Taste M.     
+Mit der Taste R lässt sich die Verschiebung auf den Spieler zentrieren und mit der Taste Z lässt sich die automatische Scroll-Funktion (de-)aktivieren.  
+Durch das Drücken der linken Maustaste kann man den dargestellten Bereich der Karte verschieben, wenn das automatische Scrollen deaktivert wurde.
 
 ## Texturen
 

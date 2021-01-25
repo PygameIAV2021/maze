@@ -37,12 +37,16 @@ class Game():
         self.map = map.Map(self)   
         self.player = player.Player(self)
         self.models = models.Models()
+
+        self.window_width, self.window_height = c.WINDOW_SIZE
         
 
     def pause_game(self):
 
         old_state = self.game_state
         self.game_state = c.game_state.PAUSE
+
+        pause_x, pause_y = c.PAUSE_SIZE
 
         # loop while paused
         while self.game_state == c.game_state.PAUSE:
@@ -53,7 +57,7 @@ class Game():
             self.screen.fill(c.BLACK)
 
             # draw pause screen
-            self.screen.blit(self.pause_screen, Rect(math.floor(c.WINDOW_WIDTH / 2) - math.floor(c.PAUSE_X_SIZE / 2),math.floor(c.WINDOW_HEIGHT / 2) - math.floor(c.PAUSE_Y_SIZE / 2), c.PAUSE_X_SIZE, c.PAUSE_Y_SIZE ))
+            self.screen.blit(self.pause_screen, Rect(math.floor(self.window_width / 2) - math.floor(pause_x / 2),math.floor(self.window_height / 2) - math.floor(pause_y / 2), pause_x, pause_y ))
 
             # update screen
             pygame.display.flip()
@@ -102,8 +106,15 @@ class Game():
                         self.player.velocity[0] = self.player.velocity[0] * 2
                     if self.player.velocity[1] != 0:
                         self.player.velocity[1] = self.player.velocity[1] * 2
+                # toggle the scrolling of the map
                 elif event.key == pygame.K_z: 
-                    self.scrolling = not self.scrolling
+                    self.auto_scrolling = not self.auto_scrolling
+                # center the player on the screen
+                elif event.key == pygame.K_r:
+                    if self.scrolling and not self.auto_scrolling:
+                        self.offset = (
+                            math.floor(self.window_width / 2) -  self.player.rect[0],
+                            math.floor(self.window_height / 2) - self.player.rect[1] )
             elif event.type == pygame.KEYUP:
                 # reset player velocity after key release
                 if event.key == pygame.K_w or event.key == pygame.K_s:
@@ -126,11 +137,35 @@ class Game():
 
     def scroll(self, rel):
 
-        if not self.scrolling: return
-
+        # get the mouse movement and scroll by that margin
+        if self.auto_scrolling or not self.scrolling: return
+        
         self.offset = (
             self.offset[0] + rel[0],
             self.offset[1] + rel[1] )
+
+    def do_auto_scroll(self):
+        
+        # calculate the scrolling offset, but do not move beyond map borders
+        if not (self.scrolling and self.auto_scrolling) : return
+
+        x_offset = math.floor(self.window_width / 2) -  self.player.rect[0]
+        y_offset = math.floor(self.window_height / 2) - self.player.rect[1]
+        
+        if x_offset > 0: 
+            x_offset = 0
+        if x_offset < -((self.map.tiles_x*c.TILE_SIZE) - self.window_width): 
+            x_offset = -((self.map.tiles_x*c.TILE_SIZE) - self.window_width)
+        
+        if y_offset > 0: 
+            y_offset = 0
+        if y_offset < -((self.map.tiles_y*c.TILE_SIZE) -  self.window_height): 
+            y_offset = -((self.map.tiles_y*c.TILE_SIZE) -  self.window_height)
+
+        self.offset = (
+            x_offset,
+            y_offset )
+
 
     def check_target_completion(self):
         
@@ -397,7 +432,14 @@ class Game():
         self.mouse_cap = False
 
         # variable for scrolling
-        self.scrolling = True
+        if self.window_width <= (c.TILE_SIZE * self.map.tiles_x) or self.window_height <= (c.TILE_SIZE * self.map.tiles_y):
+            self.scrolling = True
+        else:
+            self.scrolling = False    
+        print(self.scrolling)
+
+        # variable for auto scrolling
+        self.auto_scrolling = True
 
         # current scrolling offset
         self.offset = (0, 0)
@@ -424,6 +466,9 @@ class Game():
 
             # handle all input events
             self.handle_events()
+
+            # move map if auto_scroll is enabled
+            if self.auto_scrolling: self.do_auto_scroll()
 
             # draw map from array
             self.map.draw()
