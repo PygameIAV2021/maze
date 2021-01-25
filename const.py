@@ -7,7 +7,6 @@ Created on Thu Dec  3 08:27:00 2020
 """
 
 import enum
-from pygame import Rect
 
 # File including most of the static values
 TILE_SIZE = 64
