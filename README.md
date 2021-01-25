@@ -54,7 +54,6 @@ Dort befinden sich am Anfang einer Datei Konstanten, die die folgenden Parameter
 - ENEMY_COUNT = Maximale Anzahl der Gegner
 - FPS = Anzahl der Bilder pro Sekunde
 - WINDOW_SIZE = Größe des Fensters (Breite, Höhe)
-- PAUSE_SIZE = Größe des Pause-Banners (Breite, Höhe)
 - WALK_ANIMATION_LENGTH = Länge der Laufanimation
 - SLASH_ANIMATION_LENGTH = Länge der Schalganimation
 - HURT_ANIMATION_LENGTH = Länge der Spielertod
@@ -62,8 +61,6 @@ Dort befinden sich am Anfang einer Datei Konstanten, die die folgenden Parameter
 - HURT_ANIMATION_MODIFIER = Multiplikator für Spielertod
 - PLAYER_WALK_ANIMATION_MODIFIER = Multiplikator für Spielerlaufanimation
 - ENEMY_WALK_ANIMATION_MODIFIER = Multiplikator für Gegnerlaufanimation
-- MENU_TOP_SIZE = Größe des Menü-Banners (Breite, Höhe)
-- MENU_BOT_SIZE = Größe des unteren Menü-Textes (Breite, Höhe)
 
 ## Interner Aufbau
 

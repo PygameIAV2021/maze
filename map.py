@@ -102,10 +102,9 @@ class Map():
                         base = Rect( c.base_id.ROAD * c.TILE_SIZE, rand_base * c.TILE_SIZE, c.TILE_SIZE, c.TILE_SIZE )
                         border = Rect( c.draw_v.RS_0 * c.TILE_SIZE, 0, c.TILE_SIZE, c.TILE_SIZE ) 
 
-                    # note, for scrolling tiles, uncomment:
-                    if self.game.scrolling:
-                        dest.left += self.game.offset[0]
-                        dest.top += self.game.offset[1]                        
+                    # for scrolling
+                    dest.left += self.game.offset[0]
+                    dest.top += self.game.offset[1]                       
 
                     self.screen.blit( self.basetiles, dest, base)
                     self.screen.blit( self.bordertiles, dest, border)

@@ -103,10 +103,9 @@ class Player(pygame.sprite.Sprite):
 
         dest = Rect(self.rect.left,self.rect.top,self.rect.width,self.rect.height)
 
-        # note, for scrolling tiles, uncomment:
-        if self.game.scrolling:
-            dest.left += self.game.offset[0]
-            dest.top += self.game.offset[1] 
+        # for scrolling
+        dest.left += self.game.offset[0]
+        dest.top += self.game.offset[1] 
 
         # draw player on map
         src = Rect(state * c.PLAYER_SIZE, 0, c.PLAYER_SIZE, c.PLAYER_SIZE )
@@ -137,10 +136,9 @@ class Player(pygame.sprite.Sprite):
 
         dest = Rect(self.rect.left,self.rect.top,self.rect.width,self.rect.height)
 
-        # note, for scrolling tiles, uncomment:
-        if self.game.scrolling:
-            dest.left += self.game.offset[0]
-            dest.top += self.game.offset[1]         
+        # for scrolling
+        dest.left += self.game.offset[0]
+        dest.top += self.game.offset[1]         
 
         # draw player on map
         src = Rect(state * c.PLAYER_SIZE, self.direction * c.PLAYER_SIZE, c.PLAYER_SIZE, c.PLAYER_SIZE )

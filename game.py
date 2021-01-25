@@ -26,27 +26,24 @@ class Game():
     def __init__(self,screen, clock):
 
         # display screen and set up clock
+        self.window_width, self.window_height = c.WINDOW_SIZE
         self.screen = screen
         self.clock = clock
 
         # load pause screen
-        pause_w, pause_h = c.PAUSE_SIZE
-        self.pause_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Pause.png")).convert_alpha(),(pause_w, pause_h))
+        self.pause_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Pause.png")).convert_alpha(),((math.floor(self.window_width/3), math.floor(self.window_height/7))))
 
         # load classes for the map and the player
         self.map = map.Map(self)   
         self.player = player.Player(self)
         self.models = models.Models()
 
-        self.window_width, self.window_height = c.WINDOW_SIZE
         
 
     def pause_game(self):
 
         old_state = self.game_state
         self.game_state = c.game_state.PAUSE
-
-        pause_x, pause_y = c.PAUSE_SIZE
 
         # loop while paused
         while self.game_state == c.game_state.PAUSE:
@@ -57,7 +54,7 @@ class Game():
             self.screen.fill(c.BLACK)
 
             # draw pause screen
-            self.screen.blit(self.pause_screen, Rect(math.floor(self.window_width / 2) - math.floor(pause_x / 2),math.floor(self.window_height / 2) - math.floor(pause_y / 2), pause_x, pause_y ))
+            self.screen.blit(self.pause_screen, Rect(math.floor(self.window_width / 3),math.floor(self.window_height/7*3), math.floor(self.window_width/3), math.floor(self.window_height/5) ))
 
             # update screen
             pygame.display.flip()
@@ -114,7 +111,8 @@ class Game():
                     if self.scrolling and not self.auto_scrolling:
                         self.offset = (
                             math.floor(self.window_width / 2) -  self.player.rect[0],
-                            math.floor(self.window_height / 2) - self.player.rect[1] )
+                            math.floor(self.window_height / 2) - self.player.rect[1] 
+                            )
             elif event.type == pygame.KEYUP:
                 # reset player velocity after key release
                 if event.key == pygame.K_w or event.key == pygame.K_s:
@@ -142,7 +140,8 @@ class Game():
         
         self.offset = (
             self.offset[0] + rel[0],
-            self.offset[1] + rel[1] )
+            self.offset[1] + rel[1] 
+            )
 
     def do_auto_scroll(self):
         
@@ -164,7 +163,8 @@ class Game():
 
         self.offset = (
             x_offset,
-            y_offset )
+            y_offset 
+            )
 
 
     def check_target_completion(self):
@@ -436,13 +436,18 @@ class Game():
             self.scrolling = True
         else:
             self.scrolling = False    
-        print(self.scrolling)
+
+        # current scrolling offset if the map is smaller than the window
+        if self.window_width > (c.TILE_SIZE * self.map.tiles_x) or self.window_height > (c.TILE_SIZE * self.map.tiles_y):
+            self.offset = (
+                math.floor((self.window_width - (c.TILE_SIZE * self.map.tiles_x)) / 2),
+                math.floor((self.window_height - (c.TILE_SIZE * self.map.tiles_y)) / 2)
+            )
+        else:
+            self.offset = (0, 0)
 
         # variable for auto scrolling
         self.auto_scrolling = True
-
-        # current scrolling offset
-        self.offset = (0, 0)
 
         # Game ending enemy
         self.foe = None

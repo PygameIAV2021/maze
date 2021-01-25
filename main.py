@@ -32,14 +32,12 @@ class Main():
         self.clock = pygame.time.Clock()
 
         # load WIN, DEATH and STARTING screen
-        self.top_width, self.top_height = c.MENU_TOP_SIZE
-        self.bot_width, self.bot_height = c.MENU_BOT_SIZE
-        self.start_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Start.png")).convert_alpha(),(self.top_width, self.top_height))
-        self.death_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Death.png")).convert_alpha(),(self.top_width, self.top_height))
-        self.win_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Win.png")).convert_alpha(),(self.top_width, self.top_height))
+        self.start_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Start.png")).convert_alpha(),(math.floor(self.window_w/8*6), math.floor(self.window_h/4)))
+        self.death_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Death.png")).convert_alpha(),(math.floor(self.window_w/8*6), math.floor(self.window_h/4)))
+        self.win_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Win.png")).convert_alpha(),(math.floor(self.window_w/8*6), math.floor(self.window_h/4)))
         
         # load menu screen
-        self.menu_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Menu.png")).convert_alpha(),(self.bot_width, self.bot_height))
+        self.menu_screen = pygame.transform.smoothscale(pygame.image.load(os.path.join("images", "Menu.png")).convert_alpha(),(math.floor(self.window_w/12*10), math.floor(self.window_h/2)))
 
         # create game object
         self.game = game.Game(self.screen, self.clock)
@@ -58,7 +56,7 @@ class Main():
             self.screen.fill(c.BLACK)
 
             # Get position for top banner
-            top_dest = Rect(math.floor(self.window_w / 2)-math.floor(self.top_width / 2),math.floor(self.window_h / 4)-math.floor(self.top_height / 2),self.top_width,self.top_height)
+            top_dest = Rect(math.floor(self.window_w/8),math.floor(self.window_h/8),self.window_w,math.floor(self.window_h/2))
             
             if self.state == c.game_state.EXIT:                
                 self.screen.blit(self.start_screen, top_dest)
@@ -68,7 +66,7 @@ class Main():
                 self.screen.blit(self.death_screen, top_dest)
 
             # Get position for bottom menu
-            bot_dest = Rect(math.floor(self.window_w / 2)-math.floor(self.bot_width / 2),math.floor(self.window_h / 4)-math.floor(self.bot_height / 2) + math.floor(self.window_h / 2),self.bot_width,self.bot_height)
+            bot_dest = Rect(math.floor(self.window_w/12),math.floor(self.window_h/2),self.window_w,math.floor(self.window_h/2))
             self.screen.blit(self.menu_screen, bot_dest)
 
             pygame.display.flip()
@@ -81,7 +79,7 @@ class Main():
                             if event.key == pygame.K_ESCAPE:
                                 show_menu = False
                             if event.key == pygame.K_RETURN:
-                                self.state = self.game.run_game(20,20)
+                                self.state = self.game.run_game(10,10)
             
 
 if __name__=="__main__":
