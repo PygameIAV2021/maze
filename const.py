@@ -10,9 +10,6 @@ import enum
 from pygame import Rect
 
 # File including most of the static values
-
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
 TILE_SIZE = 32
 ENEMY_SIZE = TILE_SIZE
 PLAYER_SIZE = TILE_SIZE
@@ -33,6 +30,8 @@ PLAYER_WALK_ANIMATION_MODIFIER = 7
 ENEMY_WALK_ANIMATION_MODIFIER = 5
 MENU_TOP_SIZE = (556,156)
 MENU_BOT_SIZE = (1000,700)
+
+# The following enumerations may not be changed
 
 # enum for game state:
 class game_state(enum.IntEnum):
@@ -115,3 +114,6 @@ class return_v(enum.IntEnum):
     OCCUPIED = 1
     OUTOFBOUND = 2
     INVALID = 99
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
