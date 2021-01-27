@@ -1,99 +1,99 @@
 Mazewalker
 ====
 
-## Das Spiel
+## The Game
 
-Das Spielprinzip ist relativ simpel gehalten. Man muss seine Figur zum Ziel (die kleine silber/goldene Falltür) steuern und muss dabei den in dem Labyrinth herumirrenden Skeletten ausweichen. Es ist möglich das Spiel jederzeit zu pausieren oder sich die bereits besuchten Felder anzeigen zu lassen. Der Spieler beginnt immer links oben (Quadrant II.) und das Ziel befindet sich in der rechten unteren Ecke (Quadrant IV.). Die Gegener beginnen auf zufälligen Feldern in allen Quadranten (I., III., IV.) außer dem linken oberen Quadranten (II.), in dem der Spieler beginnt.
+The game follows a simple principle. The goal is to move your Character to  the exit (the small silver/golder Trapdoor) while evading the patrolling Skeletons. It is possible to pause the game at any time or to show the visited tiles. The player always begins in the upper left corner (quadrant  II.) and the exit will be created in the lower right (quadrant IV.). All enemies will spawn on random tiles in every quadrant except the upper left quadrant, where the player spawns.
 
-## Steuerung
+## Controls
 
-Die Bewegung der Spielfigur erfolgt mit den Tasten W, A, S, D.  
-Das Spiel kann mit der Taste ESC verlassen und mit der Taste P pausiert werden.  
-Das Anlegen der Markierungen kann mit der Taste T an- und ausgeschaltet werden, dass Anzeiger dieser mit der Taste M.     
-Mit der Taste R lässt sich die Verschiebung auf den Spieler zentrieren und mit der Taste Z lässt sich die automatische Scroll-Funktion (de-)aktivieren.  
-Durch das Drücken der linken Maustaste kann man den dargestellten Bereich der Karte verschieben, wenn das automatische Scrollen deaktivert wurde.
+The Movement is controlled with W, A, S, D.
+The game can be paused with P and can be closed by pressing ESCAPE.
+The creation of tilemarkers can be toggled with T and can be hidden by pressing M.
+When R is pressed, the view will be centered on the player and by pressing Z the automatic scrolling can be deactivated.
+When the automatic scrolling is deactivated the map can be moved with your mouse while pressing the left mouse button.
 
-## Texturen
+## Textures
 
-Die Texte im Menü und im Pausenbildschirm wurden mithilfe der Site [Textcraft.net](https://textcraft.net/) erstellt.  
-Texturen für die Karte basieren auf angepassten Inhalten aus dem Spiel [Minecraft](https://www.minecraft.net).  
-Die verwendeten Modelle für Spieler und Gegner wurden erstellt von Johannes Sjölund (Wulax) und auf der Seite [Open Game Art](https://opengameart.org/content/lpc-medieval-fantasy-character-sprites) veröffentlicht.
+All visible texts were created on [Textcraft.net](https://textcraft.net/).
+All background textures for the map are customized and based loosely on the game [Minecraft](https://www.minecraft.net).
+All character models were designed by Johannes Sjölund (Wulax) and published on [Open Game Art](https://opengameart.org/content/lpc-medieval-fantasy-character-sprites).
 
-## Warum ein Labyrinth?
+## Why did I choose to do that project?
 
-Ich habe mich entschieden ein dynamisch generiertes Labyrinth zu programmieren, da ich mich mit den dahinter stehenden Algorithmen auseinanderstzen wollte. Der hier verwendete [Wilson-Algorithmus](https://weblog.jamisbuck.org/2011/1/20/maze-generation-wilson-s-algorithm) ist ein so genannter [Loop-Erased Random Walk](https://en.wikipedia.org/wiki/Loop-erased_random_walk). Das so erzeugte Labyrinth wird dann an die Bedürfnisse des Spiels angepasst und darin dann zufällig die Startpunkte für den Spieler und für die Gegner gewählt. Auch das Ziel ist ein zufällig gewähltes Feld.
+I decided to do a randonly generated labyrinth in order to learn the underlying algorithms. The algorithm used here is a [loop-erased random walk](https://en.wikipedia.org/wiki/Loop-erased_random_walk), more precise [wilsons algorithm](https://weblog.jamisbuck.org/2011/1/20/). The created labyrinth get adjusted to the needs of the game. All important POI like player and enemy spawn are randomly choosen.
 
-## Verwendete Bilbiotheken
+## Used libraries
 
-Die folgenden Bibliotheken wurden verwendet:
+The following libraries are used in the project:
 
-* pygame (Python-Programmbibliothek zur Spieleprogrammierung)
-   * Genutzt als Basis für das gesamte Projekt
-* math (Built-In Modul für mathematische Operationen)
-   * Genutzt für das Runden von Zahlen
-* random (Modul für die pseudo-zufällige Genration von Zahlen)
-  * Generierung von Zahlen 
-  * Durchmischen von Listen
-* os (Modul für Operationen des Betriebssystem)
-  * Anpassen von Pfaden zu den Bildern
-* enum (Modul für Aufzählungen)
-  * Aufzählungen für diverse Inhalte, z.B. Belegung des primären Arrays des Labyrinths
+* pygame 
+   * the complete project is based on this library
+* math
+   * used for rounding numbers
+* random 
+  * shuffling lists
+  * generating random numbers
+* os 
+  * adjusting path to folders
+* enum 
+  * enumerations for several values
 
-## Konfiguration
+## Configuration
 
-Die Konfiguration erfolgt über die [const.py](./const.py).  
-Dort befinden sich am Anfang einer Datei Konstanten, die die folgenden Parameter einstellen können:
+The values for configuring can be found in [const.py](./const.py).  
+The constants in the first lines of the file can be adjusted to change the following values:
 
-- TILE_SIZE: Größe eines Feldes in Pixeln
-- ENEMY_SIZE = Größe eines Gegners in Pixeln (<= TILE_SIZE>)
-- PLAYER_SIZE = Größe des Spielers in Pixeln (<= TILE_SIZE>)
-- PLAYER_SPEED = Geschwindigkeit des Spielers in Feldern pro Sekunde
-- ENEMY_SPEED = Basisgeschwindigkeit der Gegner in Feldern pro Sekunde
-- ENEMY_RAND_SPEED = Zufällige Zusatzgeschwindigkeit der Gegner in Feldern pro Sekunde
-- ENEMY_COUNT = Maximale Anzahl der Gegner
-- WINDOW_SIZE = Größe des Fensters (Breite, Höhe)
-- MAZE_SIZE = Größe des Labyrinths in Felder (Finale Größe ist 2*MAZE_SIZE+1 !!!)
+- TILE_SIZE: Size of a tile in pixel
+- ENEMY_SIZE = Size of an enemy in pixel (<= TILE_SIZE>)
+- PLAYER_SIZE = Size of the player in pixel (<= TILE_SIZE>)
+- PLAYER_SPEED = Movement speed of the player in tiles per seconds
+- ENEMY_SPEED = Movement speed of the enemies in tiles per seconds
+- ENEMY_RAND_SPEED = Added randomized movement speed of the enemies in tiles per seconds
+- ENEMY_COUNT = Maximum count of enemies
+- WINDOW_SIZE = Size of the window (Width, Height)
+- MAZE_SIZE = Size of the maze in tiles (final size is 2*MAZE_SIZE+1 !!!)
 
-## Interner Aufbau
+## Internal structure
 
-Das Projekt ist objektorientiert aufgebaut.  
-Die folgenden Klassen existieren:
+The project is object oriented.  
+The following classed are used in the project:
 
 * Main
-   * Stellt das Hauptmenü dar
-   * Startet ein einzelnes Spiel bei jedem Aufruf
+   * shows the main menu
+   * start the game after player input
 * Game
-   * Erstellt den Spieler
-   * Lässt das Labyrinth von dem Generator erzeugen
-   * Verwaltet den gesamten Spielablauf
-   * Bewegt die Gegner
-   * Reagiert auf Eingaben
+   * creates the player
+   * create the map class for generating and managing the map
+   * react to inputs
+   * move enemies
+   * control the flow of the game
 * Player
-   * Zeichnen des Spielers
+   * draw the player
 * Models
-   * Laden aller Sprite-Sheets für die Gegner
+   * load all sprites for the enemies
 * Enemy
-   * Zeichnen der Gegner
+   * draw all enemies
 * Map
-   * Erzeugen und Aufruf des Generators zur Labyrintherstellung
-   * Zeichnen des Labyrinths
+   * create the map generator
+   * draw the maze
 * Generator
-   * Erzeugen des Labyrinths
-   * Auswählen des Startpunktes des Spielers
-   * Auswählen des Zielpunktes
-   * Festlegend der Startpunkte der Gegner
+   * create the maze
+   * choose the player spawn
+   * choose the target tile
+   * choose the enemy spawns
 
-Die folgenden Klassen die von enum.IntEnum erben existieren:
+The following classes inheriting from enum.Intenum:
 
 * game_state
-   * Enthält die Werte, die die Schleifenvariablen in der Main und Game annehmen können
+   * Contains all possible values for the main game loops
 * direction
-   * Die vier Richtungen (Oben, Links, Unten, Rechts) in der Reihenfolge wie sie in den Spritesheets vorhanden sind
+   * Contains all possible directions
 * field_v
-   * Werte die während der Generierung des Labyrinthes im Array abgelegt werden
+   * Values used while generating the maze
 * draw_v
-   * Werte die am Ende der Generierung im Array liegen und das Aussehen der einzelnen Felder bestimmen
+   * Values describing the final look of the maze at the end of the generation process
 * base_id
-   * Werte der 3 möglichen Feld-Typen (Weg, Wand, Ausgang)
+   * Values of the three tile types (Road, Wall, Exit)
 * return_v
-   * Werte die während der Generation des Labyrinths als Ergebnis einer Feldprüfung zurückgegeben werden
+   * Values used while generating the maze
