@@ -49,7 +49,7 @@ class Game():
         # loop while paused
         while self.game_state == c.game_state.PAUSE:
             # get ticks per second
-            self.dt = self.clock.tick(c.FPS) / 1000
+            self.dt = self.clock.tick_busy_loop(c.FPS) / 1000
 
             # set background
             self.screen.fill(c.BLACK)
@@ -98,13 +98,13 @@ class Game():
                     self.pause_game()
                 # set player velocity after key press
                 elif event.key == pygame.K_w:
-                    self.player.velocity[1] = -self.player.speed * self.dt
+                    self.player.velocity[1] = -math.floor(self.player.speed * self.dt)
                 elif event.key == pygame.K_s:
-                    self.player.velocity[1] = self.player.speed * self.dt
+                    self.player.velocity[1] = math.floor(self.player.speed * self.dt)
                 elif event.key == pygame.K_a:
-                    self.player.velocity[0] = -self.player.speed * self.dt
+                    self.player.velocity[0] = -math.floor(self.player.speed * self.dt)
                 elif event.key == pygame.K_d:
-                    self.player.velocity[0] = self.player.speed * self.dt
+                    self.player.velocity[0] = math.floor(self.player.speed * self.dt)
                 # events for speeding up during pressing of l_shift
                 elif event.key == pygame.K_LSHIFT:
                     self.player.speed = self.player.speed * 2
@@ -329,21 +329,21 @@ class Game():
         # set the next target and the corresponding movement speed
         if new_direction == c.direction.UP:
             enemy.velocity[0] = 0
-            enemy.velocity[1] = - (enemy.speed * self.dt * 0.5)
+            enemy.velocity[1] = -math.floor(enemy.speed * self.dt)
             enemy.target[1] -= c.TILE_SIZE
 
         elif new_direction == c.direction.DOWN:
             enemy.velocity[0] = 0
-            enemy.velocity[1] = enemy.speed * self.dt
+            enemy.velocity[1] = math.floor(enemy.speed * self.dt)
             enemy.target[1] += c.TILE_SIZE
 
         elif new_direction == c.direction.LEFT:
-            enemy.velocity[0] = - (enemy.speed * self.dt * 0.5)
+            enemy.velocity[0] = -math.floor(enemy.speed * self.dt)
             enemy.velocity[1] = 0
             enemy.target[0] -= c.TILE_SIZE
 
         elif new_direction == c.direction.RIGHT:
-            enemy.velocity[0] = enemy.speed * self.dt
+            enemy.velocity[0] = math.floor(enemy.speed * self.dt)
             enemy.velocity[1] = 0
             enemy.target[0] += c.TILE_SIZE
 
@@ -440,6 +440,7 @@ class Game():
         s_p_0, s_p_1 = self.starting_p
         self.player.rect[0] = s_p_0*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_SIZE)/2)
         self.player.rect[1] = s_p_1*c.TILE_SIZE + math.floor((c.TILE_SIZE-c.PLAYER_SIZE)/2)
+        self.player.velocity = [0,0]
 
         # variable for state of mouse button
         self.mouse_cap = False

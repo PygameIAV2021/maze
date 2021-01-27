@@ -16,8 +16,8 @@ PLAYER_SPEED = 4 # Tiles per second
 ENEMY_SPEED = 3 # Tiles per second
 ENEMY_RAND_SPEED = 1 # Tiles per second
 ENEMY_COUNT = 6
-WINDOW_SIZE = (1456,1296) # (Width, Height)
-MAZE_SIZE = (45,40) # (Width, Height)
+WINDOW_SIZE = (1312,1312) # (Width, Height)
+MAZE_SIZE = (20,20) # (Width, Height)
 
 # The following entries may not be changed
 
