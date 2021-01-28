@@ -3,15 +3,16 @@ Mazewalker
 
 ## Das Spiel
 
-Das Spielprinzip ist relativ simpel gehalten. Man muss seine Figur zum Ziel (die kleine silber/goldene Falltür) steuern und muss dabei den in dem Labyrinth herumirrenden Skeletten ausweichen. Es ist möglich das Spiel jederzeit zu pausieren oder sich die bereits besuchten Felder anzeigen zu lassen. Der Spieler beginnt immer links oben (Quadrant II.) und das Ziel befindet sich in der rechten unteren Ecke (Quadrant IV.). Die Gegener beginnen auf zufälligen Feldern in allen Quadranten (I., III., IV.) außer dem linken oberen Quadranten (II.), in dem der Spieler beginnt.
+Das Spielprinzip ist relativ simpel gehalten. Man muss seine Figur zum Ziel (die kleine silber/goldene Falltür) steuern und muss dabei den in dem Labyrinth herumirrenden Skeletten ausweichen. Es ist möglich das Spiel jederzeit zu pausieren oder sich die bereits besuchten Felder anzeigen zu lassen. Der Spieler beginnt immer links oben (Quadrant II.) und das Ziel befindet sich in der rechten unteren Ecke (Quadrant IV.). Die Gegner beginnen auf zufälligen Feldern in allen Quadranten (I., III., IV.) außer dem linken oberen Quadranten (II.), in dem der Spieler beginnt.
 
 ## Steuerung
 
 Die Bewegung der Spielfigur erfolgt mit den Tasten W, A, S, D.  
+Mit der Taste SHIFT kann der Spieler sprinten.
 Das Spiel kann mit der Taste ESC verlassen und mit der Taste P pausiert werden.  
-Das Anlegen der Markierungen kann mit der Taste T an- und ausgeschaltet werden, dass Anzeiger dieser mit der Taste M.     
+Das Anlegen der Markierungen kann mit der Taste T an- und ausgeschaltet werden, dass Anzeigen dieser mit der Taste M.     
 Mit der Taste R lässt sich die Verschiebung auf den Spieler zentrieren und mit der Taste Z lässt sich die automatische Scroll-Funktion (de-)aktivieren.  
-Durch das Drücken der linken Maustaste kann man den dargestellten Bereich der Karte verschieben, wenn das automatische Scrollen deaktivert wurde.
+Durch das Drücken der linken Maustaste kann man den dargestellten Bereich der Karte verschieben, wenn das automatische Scrollen deaktiviert wurde.
 
 ## Texturen
 
@@ -21,9 +22,9 @@ Die verwendeten Modelle für Spieler und Gegner wurden erstellt von Johannes Sj�
 
 ## Warum ein Labyrinth?
 
-Ich habe mich entschieden ein dynamisch generiertes Labyrinth zu programmieren, da ich mich mit den dahinter stehenden Algorithmen auseinanderstzen wollte. Der hier verwendete [Wilson-Algorithmus](https://weblog.jamisbuck.org/2011/1/20/maze-generation-wilson-s-algorithm) ist ein so genannter [Loop-Erased Random Walk](https://en.wikipedia.org/wiki/Loop-erased_random_walk). Das so erzeugte Labyrinth wird dann an die Bedürfnisse des Spiels angepasst und darin dann zufällig die Startpunkte für den Spieler und für die Gegner gewählt. Auch das Ziel ist ein zufällig gewähltes Feld.
+Ich habe mich entschieden ein dynamisch generiertes Labyrinth zu programmieren, da ich mich mit den dahinterstehenden Algorithmen auseinandersetzen wollte. Der hier verwendete [Wilson-Algorithmus](https://weblog.jamisbuck.org/2011/1/20/maze-generation-wilson-s-algorithm) ist ein so genannter [Loop-Erased Random Walk](https://en.wikipedia.org/wiki/Loop-erased_random_walk). Das so erzeugte Labyrinth wird dann an die Bedürfnisse des Spiels angepasst und darin dann zufällig die Startpunkte für den Spieler und für die Gegner gewählt. Auch das Ziel ist ein zufällig gewähltes Feld.
 
-## Verwendete Bilbiotheken
+## Verwendete Bibliotheken
 
 Die folgenden Bibliotheken wurden verwendet:
 
@@ -75,7 +76,7 @@ Die folgenden Klassen existieren:
 * Enemy
    * Zeichnen der Gegner
 * Map
-   * Erzeugen und Aufruf des Generators zur Labyrintherstellung
+   * Erzeugen und Aufruf des Generators zur Labyrinth Erstellung
    * Zeichnen des Labyrinths
 * Generator
    * Erzeugen des Labyrinths

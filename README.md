@@ -3,11 +3,12 @@ Mazewalker
 
 ## The Game
 
-The game follows a simple principle. The goal is to move your Character to  the exit (the small silver/golder Trapdoor) while evading the patrolling Skeletons. It is possible to pause the game at any time or to show the visited tiles. The player always begins in the upper left corner (quadrant  II.) and the exit will be created in the lower right (quadrant IV.). All enemies will spawn on random tiles in every quadrant except the upper left quadrant, where the player spawns.
+The game follows a simple principle. The goal is to move your Character to the exit (the small silver/golden Trapdoor) while evading the patrolling Skeletons. It is possible to pause the game at any time or to show the visited tiles. The player always begins in the upper left corner (quadrant II.) and the exit will be created in the lower right (quadrant IV.). All enemies will spawn on random tiles in every quadrant except the upper left quadrant, where the player spawns.
 
 ## Controls
 
 The Movement is controlled with W, A, S, D.
+When the SHIFT key is pressed, the player can move twice as fast.
 The game can be paused with P and can be closed by pressing ESCAPE.
 The creation of tilemarkers can be toggled with T and can be hidden by pressing M.
 When R is pressed, the view will be centered on the player and by pressing Z the automatic scrolling can be deactivated.
@@ -21,7 +22,7 @@ All character models were designed by Johannes Sjölund (Wulax) and published on
 
 ## Why did I choose to do that project?
 
-I decided to do a randonly generated labyrinth in order to learn the underlying algorithms. The algorithm used here is a [loop-erased random walk](https://en.wikipedia.org/wiki/Loop-erased_random_walk), more precise [wilsons algorithm](https://weblog.jamisbuck.org/2011/1/20/). The created labyrinth get adjusted to the needs of the game. All important POI like player and enemy spawn are randomly choosen.
+I decided to do a randomly generated labyrinth in order to learn the underlying algorithms. The algorithm used here is a [loop-erased random walk](https://en.wikipedia.org/wiki/Loop-erased_random_walk), more precise [Wilson’s algorithm](https://weblog.jamisbuck.org/2011/1/20/). The created labyrinth get adjusted to the needs of the game. All important POI like player and enemy spawn are randomly chosen.
 
 ## Used libraries
 
