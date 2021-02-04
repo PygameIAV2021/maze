@@ -22,7 +22,7 @@ All character models were designed by Johannes Sjölund (Wulax) and published on
 
 ## Why did I choose to do that project?
 
-I decided to do a randomly generated labyrinth in order to learn the underlying algorithms. The algorithm used here is a [loop-erased random walk](https://en.wikipedia.org/wiki/Loop-erased_random_walk), more precise [Wilson’s algorithm](https://weblog.jamisbuck.org/2011/1/20/). The created labyrinth get adjusted to the needs of the game. All important POI like player and enemy spawn are randomly chosen.
+I decided to do a randomly generated labyrinth in order to learn the underlying algorithms. The algorithm used here is a [loop-erased random walk](https://en.wikipedia.org/wiki/Loop-erased_random_walk), more precise Wilson’s algorithm. The created labyrinth get adjusted to the needs of the game. All important POI like player and enemy spawn are randomly chosen.
 
 ## Used libraries
 
